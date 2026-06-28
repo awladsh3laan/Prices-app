@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>عرض أسعار المنتجات</title>
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Manifest للتطبيق -->
+    <link rel="manifest" href="./manifest.json">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f4f7fc;
+            padding: 30px 20px;
+            color: #1e293b;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            flex: 1;
+        }
+
+        /* ===== رأس التطبيق مع الشعار ===== */
+        .app-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #ffffff 0%, #f0f4ff 100%);
+            padding: 20px 28px;
+            border-radius: 28px;
+            box-shadow: 0 4px 20px rgba(37, 99, 235, 0.08);
+            border: 1px solid #e2e9f5;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .app-logo {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            box-shadow: 0 8px 24px rgba(37, 99, 235, 0.3);
+            flex-shrink: 0;
+            transition: transform 0.3s ease;
+        }
+
+        .app-logo:hover {
+            transform: rotate(-8deg) scale(1.05);
+        }
+
+        h1 {
+            font-size: 2.4rem;
+            font-weight: 700;
+            color: #0f2b4b;
+            letter-spacing: 0.5px;
+        }
+
+        h1 span {
+            color: #2563eb;
+        }
+
+        .offline-badge {
+            background: #22c55e;
+            color: white;
+            font-size: 0.7rem;
+            padding: 4px 16px;
+            border-radius: 30px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 600;
+            margin-right: 8px;
+            animation: pulse-badge 2s infinite;
+        }
+
+        @keyframes pulse-badge {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .header-stats {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            font-size: 0.9rem;
+            color: #475569;
+            background: #f8fafc;
+            padding: 8px 18px;
+            border-radius: 40px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .header-stats i {
+            color: #2563eb;
+        }
+
+        .header-stats .count {
+            font-weight: 700;
+            color: #0f2b4b;
+            font-size: 1.1rem;
+        }
+
+        /* ===== العنوان الفرعي ===== */
+        .sub-head {
+            text-align: center;
+            color: #475569;
+            margin: 20px 0 30px;
+            font-size: 1.1rem;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #d1d9e6;
+        }
+
+        /* ===== البحث ===== */
+        .search-wrap {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+
+        .search-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 550px;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 16px 55px 16px 25px;
+            font-size: 1.1rem;
+            border: 2px solid #d1d9e6;
+            border-radius: 60px;
+            background: white;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+            transition: 0.3s;
+            outline: none;
+            font-family: inherit;
+            text-align: right;
+        }
+
+        .search-box:focus {
+            border-color: #2563eb;
+            box-shadow: 0 8px 28px rgba(37,99,235,0.13);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 22px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            font-size: 1.2rem;
+            pointer-events: none;
+        }
+
+        .search-clear {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            font-size: 1rem;
+            cursor: pointer;
+            display: none;
+            background: #f1f5f9;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            align-items: center;
+            justify-content: center;
+            transition: 0.2s;
+        }
+
+        .search-clear:hover {
+            background: #e2e8f0;
+            color: #1e293b;
+        }
+
+        .search-clear.visible {
+            display: flex;
+        }
+
+        /* ===== شبكة المنتجات ===== */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 24px;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 24px;
+            padding: 22px 20px 18px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
+            transition: all 0.25s ease;
+            border: 1px solid #e9edf2;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, #2563eb, #7c3aed);
+            border-radius: 0 4px 4px 0;
+        }
+
+        .product-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.08);
+            border-color: #bdd3ff;
+        }
+
+        .product-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #0a1e3c;
+            margin-bottom: 8px;
+            line-height: 1.4;
+            min-height: 3.2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .product-name i {
+            color: #2563eb;
+            width: 1.6rem;
+            font-size: 1.1rem;
+        }
+
+        .product-price-wrapper {
+            display: flex;
+            align-items: baseline;
+            flex-wrap: wrap;
+            gap: 6px 10px;
+            margin-top: 4px;
+        }
+
+        .price-label {
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #475569;
+            background: #f1f5f9;
+            padding: 2px 14px;
+            border-radius: 30px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .price-label i {
+            font-size: 0.7rem;
+            color: #2563eb;
+        }
+
+        .product-price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1d4ed8;
+            background: #eef4ff;
+            display: inline-block;
+            padding: 4px 18px;
+            border-radius: 40px;
+            letter-spacing: 0.3px;
+        }
+
+        .product-category {
+            font-size: 0.7rem;
+            font-weight: 500;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-top: 14px;
+            border-top: 1px dashed #e9edf2;
+            padding-top: 12px;
+        }
+
+        /* ===== لا توجد نتائج ===== */
+        .no-result {
+            grid-column: 1 / -1;
+            text-align: center;
+            font-size: 1.4rem;
+            color: #64748b;
+            padding: 60px 20px;
+            background: #f8fafc;
+            border-radius: 48px;
+            border: 2px dashed #dce2ec;
+        }
+
+        /* ===== التذييل ===== */
+        .footer {
+            margin-top: 50px;
+            padding: 25px 20px 20px;
+            text-align: center;
+            border-top: 2px solid #e9edf2;
+            background: white;
+            border-radius: 24px 24px 0 0;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.02);
+        }
+
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #0f2b4b;
+        }
+
+        .footer-brand .signature-icon {
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
+            color: white;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 16px rgba(37, 99, 235, 0.25);
+        }
+
+        .footer-brand .name {
+            color: #2563eb;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .footer-sub {
+            font-size: 0.85rem;
+            color: #94a3b8;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .footer-sub i {
+            color: #2563eb;
+        }
+
+        .footer-divider {
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, #2563eb, #7c3aed);
+            border-radius: 10px;
+            margin: 4px auto;
+        }
+
+        /* ===== إحصائيات ===== */
+        .stats {
+            text-align: center;
+            color: #94a3b8;
+            font-size: 0.85rem;
+            margin-top: 20px;
+            padding: 12px;
+        }
+
+        /* ===== استجابة ===== */
+        @media (max-width: 768px) {
+            .app-header {
+                flex-direction: column;
+                align-items: stretch;
+                padding: 16px 18px;
+                gap: 12px;
+            }
+
+            .logo-section {
+                justify-content: center;
+            }
+
+            .app-logo {
+                width: 48px;
+                height: 48px;
+                font-size: 1.5rem;
+                border-radius: 14px;
+            }
+
+            h1 {
+                font-size: 1.6rem;
+            }
+
+            .header-stats {
+                justify-content: center;
+                font-size: 0.8rem;
+                padding: 6px 14px;
+            }
+
+            .offline-badge {
+                font-size: 0.6rem;
+                padding: 3px 12px;
+            }
+
+            .products-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 14px;
+            }
+
+            .product-card {
+                padding: 16px 14px;
+            }
+
+            .product-name {
+                font-size: 1rem;
+                min-height: 2.6rem;
+            }
+
+            .product-price {
+                font-size: 1.2rem;
+                padding: 2px 14px;
+            }
+
+            .price-label {
+                font-size: 0.7rem;
+                padding: 2px 10px;
+            }
+
+            .footer-brand {
+                font-size: 0.95rem;
+            }
+
+            .footer-brand .signature-icon {
+                width: 36px;
+                height: 36px;
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 430px) {
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .app-logo {
+                width: 42px;
+                height: 42px;
+                font-size: 1.3rem;
+            }
+
+            h1 {
+                font-size: 1.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- ===== رأس التطبيق مع شعار ===== -->
+        <div class="app-header">
+            <div class="logo-section">
+                <div class="app-logo">
+                    <i class="fas fa-tags"></i>
+                </div>
+                <div>
+                    <h1>
+                        قائمة <span>الأسعار</span>
+                        <span class="offline-badge">
+                            <i class="fas fa-wifi"></i> Offline
+                        </span>
+                    </h1>
+                </div>
+            </div>
+            <div class="header-stats">
+                <i class="fas fa-boxes"></i>
+                <span class="count" id="productCount">0</span>
+                <span style="color:#94a3b8;">من</span>
+                <span class="count" id="totalCount">0</span>
+                <i class="fas fa-chevron-left" style="font-size:0.6rem; color:#d1d9e6;"></i>
+                <i class="fas fa-search" style="color:#2563eb;"></i>
+            </div>
+        </div>
+
+        <div class="sub-head">
+            <i class="fas fa-store-alt" style="margin-left: 8px;"></i>
+            جميع المنتجات محدثة — سعر البيع للمستهلك
+        </div>
+
+        <!-- ===== البحث ===== -->
+        <div class="search-wrap">
+            <div class="search-wrapper">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" id="searchInput" class="search-box" placeholder="ابحث عن منتج ..." autofocus>
+                <span class="search-clear" id="clearSearch" title="مسح البحث">
+                    <i class="fas fa-times"></i>
+                </span>
+            </div>
+        </div>
+
+        <!-- ===== شبكة المنتجات ===== -->
+        <div class="products-grid" id="productGrid">
+            <!-- يتم الملء بواسطة JavaScript -->
+        </div>
+
+        <div class="stats">
+            <i class="fas fa-database"></i>
+            تم تحميل <span id="statsTotal">0</span> منتج — يعمل بدون اتصال بالإنترنت
+        </div>
+    </div>
+
+    <!-- ===== التذييل مع بصمة مصطفى علوان ===== -->
+    <div class="footer">
+        <div class="footer-content">
+            <div class="footer-divider"></div>
+            <div class="footer-brand">
+                <span class="signature-icon">
+                    <i class="fas fa-code"></i>
+                </span>
+                <span>
+                    تم إنشاء هذه الصفحة بواسطة
+                    <span class="name">مصطفى علوان</span>
+                </span>
+                <span style="color:#94a3b8; font-weight:400; font-size:0.9rem;">
+                    <i class="fas fa-heart" style="color:#ef4444; font-size:0.8rem;"></i>
+                </span>
+            </div>
+            <div class="footer-sub">
+                <i class="fas fa-calendar-alt"></i>
+                <span id="currentYear"></span>
+                <span>•</span>
+                <i class="fas fa-mobile-alt"></i>
+                <span>تطبيق يعمل بدون إنترنت</span>
+                <span>•</span>
+                <i class="fas fa-shield-alt"></i>
+                <span>جميع الحقوق محفوظة</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==========================================
+        // بيانات المنتجات
+        // ==========================================
+        const products = [
+            { name: "بخاخة", price: "٢٥" },
+            { name: "ديتول", price: "١٧٥" },
+            { name: "مكن دراكو حريمي", price: "١٠ (للمكنة)" },
+            { name: "مكن دراكو رجالي", price: "٥ (للمكنة)" },
+            { name: "مكن في اي بي", price: "٥-٦ (للمكنة)" },
+            { name: "سويت ٣ في ١ صن", price: "١٥" },
+            { name: "سويت حرير مسعر", price: "٢٠" },
+            { name: "كريم ون", price: "٢٥" },
+            { name: "شفرات فلامنجو", price: "٢٥" },
+            { name: "سيجنال صغير", price: "١٧" },
+            { name: "سيجنال وسط", price: "٣٠" },
+            { name: "معجون مسواك وسط", price: "٢٥ - ٣٠" },
+            { name: "معجون مسواك كبير", price: "٤٠ : ٤٥" },
+            { name: "سيجنال فحم وسط", price: "٣٥" },
+            { name: "سيجنال فحم كبير", price: "٦٠ : ٦٥" },
+            { name: "كلوز اب صغير", price: "١٨" },
+            { name: "كلوز آب وسط", price: "٣٠ : ٣٢" },
+            { name: "كلوز أب كبير", price: "٥٥" },
+            { name: "ليفة كف", price: "٣٠ : ٣٥" },
+            { name: "ليفة ضهر", price: "٣٠ : ٣٥" },
+            { name: "ليفة كف مستوردة", price: "٣٥ : ٤٠" },
+            { name: "ليفة شاور مدوره", price: "٢٠" },
+            { name: "فرشة اسنان مستورده كبار", price: "٢٥ : ٣٠" },
+            { name: "فرشة اسنان عاديه كبار", price: "١٥" },
+            { name: "فرشة اسنان عاديه اطفال", price: "١٥" },
+            { name: "استاند برفان (الزجاجة)", price: "٣٠" },
+            { name: "أمواس حلاقة لورد", price: "القطعة ١٥ : ١٨" },
+            { name: "اسبرنج مزيل عرق", price: "٣٥" },
+            { name: "بريل", price: "٣" },
+            { name: "بخور ناموس", price: "١٠ (للقرص)" },
+            { name: "مناديل مبلله صغير ١٥ منديل", price: "٧" },
+            { name: "ليفة ذكيه", price: "١٥" },
+            { name: "بخور مسك الحرمين", price: "١٥" },
+            { name: "بخور اخضر مزاج", price: "١٥" },
+            { name: "ليفه مواعين اسود ٣×١", price: "١٥" },
+            { name: "ليفه مستورده ٣×١", price: "٢٠" },
+            { name: "مناديل سمايل", price: "٥٠" },
+            { name: "زينه جيب", price: "٢.٥" },
+            { name: "هاريبك", price: "٣٠" },
+            { name: "كيروكس للحشرات", price: "٩٠ - ٩٥" },
+            { name: "راجون بودره", price: "٢٥" },
+            { name: "عجينه صراصير", price: "٣٠" },
+            { name: "كلوركس ابيض لتر", price: "٣٠" },
+            { name: "كلوركس الوان لتر", price: "٦٥ - ٧٠" },
+            { name: "بريكس الوان لتر", price: "٥٥" },
+            { name: "بريكس ابيض لتر", price: "٢٥" },
+            { name: "كلوركس الوان ٢لتر", price: "١٣٠" },
+            { name: "اكتفيا لتر", price: "٤٥" },
+            { name: "ملمع بليدج خشب", price: "٧٠" },
+            { name: "فريدا خشب", price: "٦٥ - ٧٠" },
+            { name: "فنيك العاشر", price: "٤٧" },
+            { name: "فريدا ملمع زجاج", price: "٦٥" },
+            { name: "ملمع زجاج تاتش", price: "٣٥ - ٤٠" },
+            { name: "وفير ٤ لتر", price: "١٣٠" },
+            { name: "برسيل چل ٧٠٠مل", price: "٥٥" },
+            { name: "اوكسي سائل ٤٠٠مل", price: "٢٥" },
+            { name: "صابونة لوكس", price: "٢٠" },
+            { name: "صابونة كاميه", price: "٢٠" },
+            { name: "صابونة رويال", price: "١٨" },
+            { name: "صابونة انجلش", price: "١٨" },
+            { name: "صابونة سافانا", price: "١٧" },
+            { name: "صابونة ريفولي", price: "١٥" },
+            { name: "صابونة ريفولي كبيرة ١٦٥ جم", price: "٢٥" },
+            { name: "صابونة جوي", price: "١٥" },
+            { name: "صابونة دوش ١١٥ جم", price: "١٤" },
+            { name: "صابونة دوش الصغيرة ٦٠ جم", price: "٨" }
+        ];
+
+        // ==========================================
+        // عناصر DOM
+        // ==========================================
+        const grid = document.getElementById('productGrid');
+        const searchInput = document.getElementById('searchInput');
+        const clearBtn = document.getElementById('clearSearch');
+        const productCount = document.getElementById('productCount');
+        const totalCount = document.getElementById('totalCount');
+        const statsTotal = document.getElementById('statsTotal');
+
+        // تحديث العدادات
+        totalCount.textContent = products.length;
+        statsTotal.textContent = products.length;
+
+        // ==========================================
+        // دالة الحصول على أيقونة المنتج
+        // ==========================================
+        function getProductIcon(name) {
+            if (name.includes('صابونة')) return 'fa-soap';
+            if (name.includes('فرشة')) return 'fa-brush';
+            if (name.includes('معجون') || name.includes('سيجنال')) return 'fa-toothbrush';
+            if (name.includes('ليفة') || name.includes('ليفه')) return 'fa-hand-sparkles';
+            if (name.includes('بخور')) return 'fa-leaf';
+            if (name.includes('كلوركس') || name.includes('بريكس')) return 'fa-bottle-water';
+            if (name.includes('مكن')) return 'fa-bolt';
+            if (name.includes('شفرات') || name.includes('أمواس')) return 'fa-cut';
+            if (name.includes('مناديل')) return 'fa-box';
+            if (name.includes('زينه')) return 'fa-crown';
+            if (name.includes('ديتول')) return 'fa-shield-halved';
+            if (name.includes('بخاخة')) return 'fa-spray-can-sparkles';
+            if (name.includes('كريم')) return 'fa-cream';
+            if (name.includes('شاور')) return 'fa-shower';
+            if (name.includes('مسواك')) return 'fa-tooth';
+            if (name.includes('استاند')) return 'fa-display';
+            if (name.includes('هاريبك')) return 'fa-bug';
+            if (name.includes('كيروكس')) return 'fa-skull';
+            if (name.includes('راجون')) return 'fa-flask';
+            if (name.includes('عجينه')) return 'fa-jar';
+            if (name.includes('برسيل')) return 'fa-bucket';
+            if (name.includes('اوكسي')) return 'fa-droplet';
+            if (name.includes('وفير')) return 'fa-wind';
+            if (name.includes('بريل')) return 'fa-bolt';
+            if (name.includes('زينه')) return 'fa-gem';
+            if (name.includes('كلوز')) return 'fa-mouth';
+            return 'fa-cube';
+        }
+
+        // ==========================================
+        // عرض المنتجات
+        // ==========================================
+        function renderProducts(filter = '') {
+            const filterLower = filter.trim().toLowerCase();
+            let filtered = products;
+
+            if (filterLower !== '') {
+                filtered = products.filter(p => p.name.includes(filterLower));
+            }
+
+            productCount.textContent = filtered.length;
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `
+                    <div class="no-result">
+                        <i class="fas fa-box-open" style="margin-left: 12px; font-size:2rem; display:block; margin-bottom:12px; color:#2563eb;"></i>
+                        لا توجد منتجات تطابق "<strong>${filter}</strong>"
+                        <br><span style="font-size:0.9rem; color:#94a3b8;">جرب كلمة بحث مختلفة</span>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = '';
+            filtered.forEach(p => {
+                const icon = getProductIcon(p.name);
+                html += `
+                    <div class="product-card">
+                        <div class="product-name">
+                            <i class="fas ${icon}"></i> ${p.name}
+                        </div>
+                        <div class="product-price-wrapper">
+                            <span class="price-label">
+                                <i class="fas fa-tag"></i> سعر البيع للمستهلك
+                            </span>
+                            <span class="product-price">${p.price} جنيه</span>
+                        </div>
+                        <div class="product-category">
+                            <i class="fas fa-coin" style="margin-left: 6px;"></i> السعر النهائي
+                        </div>
+                    </div>
+                `;
+            });
+
+            grid.innerHTML = html;
+        }
+
+        // ==========================================
+        // أحداث البحث
+        // ==========================================
+        searchInput.addEventListener('input', function() {
+            const val = this.value;
+            renderProducts(val);
+            clearBtn.classList.toggle('visible', val.length > 0);
+        });
+
+        clearBtn.addEventListener('click', function() {
+            searchInput.value = '';
+            renderProducts('');
+            this.classList.remove('visible');
+            searchInput.focus();
+        });
+
+        // ==========================================
+        // إظهار السنة الحالية في التذييل
+        // ==========================================
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        // ==========================================
+        // العرض الأولي
+        // ==========================================
+        renderProducts();
+
+        // ==========================================
+        // Service Worker (يعمل بدون إنترنت)
+        // ==========================================
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js')
+                .then(() => console.log('✅ Service Worker مسجل'))
+                .catch(err => console.log('❌ خطأ:', err));
+        }
+    </script>
+
+</body>
+</html>
