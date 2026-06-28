@@ -1,0 +1,22 @@
+{
+    "name": "قائمة الأسعار - مصطفى علوان",
+    "short_name": "الأسعار",
+    "description": "عرض أسعار المنتجات - يعمل بدون إنترنت",
+    "start_url": "./index.html",
+    "display": "standalone",
+    "background_color": "#f4f7fc",
+    "theme_color": "#2563eb",
+    "orientation": "portrait",
+    "icons": [
+        {
+            "src": "https://via.placeholder.com/192x192/2563eb/FFFFFF?text=💰",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "https://via.placeholder.com/512x512/2563eb/FFFFFF?text=💰",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}
