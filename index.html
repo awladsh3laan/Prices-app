@@ -3,10 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>عرض أسعار المنتجات</title>
-    <!-- Font Awesome 6 -->
+    <title>قائمة الأسعار - مصطفى علوان</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- Manifest للتطبيق -->
     <link rel="manifest" href="./manifest.json">
     <style>
         * {
@@ -18,7 +16,7 @@
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: #f4f7fc;
-            padding: 30px 20px;
+            padding: 20px;
             color: #1e293b;
             min-height: 100vh;
             display: flex;
@@ -26,12 +24,12 @@
         }
 
         .container {
-            max-width: 1300px;
+            max-width: 1400px;
             margin: 0 auto;
             flex: 1;
         }
 
-        /* ===== رأس التطبيق مع الشعار ===== */
+        /* Header */
         .app-header {
             display: flex;
             align-items: center;
@@ -39,7 +37,7 @@
             flex-wrap: wrap;
             gap: 16px;
             margin-bottom: 10px;
-            background: linear-gradient(135deg, #ffffff 0%, #f0f4ff 100%);
+            background: linear-gradient(135deg, #ffffff, #f0f4ff);
             padding: 20px 28px;
             border-radius: 28px;
             box-shadow: 0 4px 20px rgba(37, 99, 235, 0.08);
@@ -64,18 +62,12 @@
             font-size: 2rem;
             box-shadow: 0 8px 24px rgba(37, 99, 235, 0.3);
             flex-shrink: 0;
-            transition: transform 0.3s ease;
-        }
-
-        .app-logo:hover {
-            transform: rotate(-8deg) scale(1.05);
         }
 
         h1 {
-            font-size: 2.4rem;
+            font-size: 2.2rem;
             font-weight: 700;
             color: #0f2b4b;
-            letter-spacing: 0.5px;
         }
 
         h1 span {
@@ -93,12 +85,6 @@
             gap: 6px;
             font-weight: 600;
             margin-right: 8px;
-            animation: pulse-badge 2s infinite;
-        }
-
-        @keyframes pulse-badge {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
         }
 
         .header-stats {
@@ -113,17 +99,12 @@
             border: 1px solid #e2e8f0;
         }
 
-        .header-stats i {
-            color: #2563eb;
-        }
-
         .header-stats .count {
             font-weight: 700;
             color: #0f2b4b;
             font-size: 1.1rem;
         }
 
-        /* ===== العنوان الفرعي ===== */
         .sub-head {
             text-align: center;
             color: #475569;
@@ -133,7 +114,7 @@
             border-bottom: 2px solid #d1d9e6;
         }
 
-        /* ===== البحث ===== */
+        /* Search */
         .search-wrap {
             display: flex;
             justify-content: center;
@@ -143,7 +124,7 @@
         .search-wrapper {
             position: relative;
             width: 100%;
-            max-width: 550px;
+            max-width: 600px;
         }
 
         .search-box {
@@ -190,29 +171,23 @@
             height: 28px;
             align-items: center;
             justify-content: center;
-            transition: 0.2s;
-        }
-
-        .search-clear:hover {
-            background: #e2e8f0;
-            color: #1e293b;
         }
 
         .search-clear.visible {
             display: flex;
         }
 
-        /* ===== شبكة المنتجات ===== */
+        /* Product Grid */
         .products-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-            gap: 24px;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
         }
 
         .product-card {
             background: white;
-            border-radius: 24px;
-            padding: 22px 20px 18px;
+            border-radius: 20px;
+            padding: 18px 18px 16px;
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
             transition: all 0.25s ease;
             border: 1px solid #e9edf2;
@@ -234,18 +209,29 @@
         }
 
         .product-card:hover {
-            transform: translateY(-6px);
+            transform: translateY(-4px);
             box-shadow: 0 18px 40px rgba(0, 0, 0, 0.08);
             border-color: #bdd3ff;
         }
 
+        .product-id {
+            font-size: 0.7rem;
+            color: #94a3b8;
+            background: #f1f5f9;
+            padding: 2px 12px;
+            border-radius: 30px;
+            align-self: flex-start;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+
         .product-name {
-            font-size: 1.2rem;
+            font-size: 1.15rem;
             font-weight: 600;
             color: #0a1e3c;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             line-height: 1.4;
-            min-height: 3.2rem;
+            min-height: 3rem;
             display: flex;
             align-items: center;
             gap: 10px;
@@ -254,7 +240,27 @@
         .product-name i {
             color: #2563eb;
             width: 1.6rem;
-            font-size: 1.1rem;
+            font-size: 1rem;
+        }
+
+        .product-details {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px 12px;
+            margin-top: 4px;
+            font-size: 0.9rem;
+            color: #475569;
+        }
+
+        .product-details span {
+            background: #f8fafc;
+            padding: 2px 12px;
+            border-radius: 20px;
+        }
+
+        .product-details .qty {
+            color: #2563eb;
+            font-weight: 600;
         }
 
         .product-price-wrapper {
@@ -262,11 +268,11 @@
             align-items: baseline;
             flex-wrap: wrap;
             gap: 6px 10px;
-            margin-top: 4px;
+            margin-top: 8px;
         }
 
         .price-label {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             font-weight: 500;
             color: #475569;
             background: #f1f5f9;
@@ -283,7 +289,7 @@
         }
 
         .product-price {
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             font-weight: 700;
             color: #1d4ed8;
             background: #eef4ff;
@@ -293,18 +299,13 @@
             letter-spacing: 0.3px;
         }
 
-        .product-category {
-            font-size: 0.7rem;
-            font-weight: 500;
+        .product-wholesale {
+            font-size: 0.8rem;
             color: #94a3b8;
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-            margin-top: 14px;
-            border-top: 1px dashed #e9edf2;
-            padding-top: 12px;
+            margin-top: 4px;
         }
 
-        /* ===== لا توجد نتائج ===== */
+        /* No result */
         .no-result {
             grid-column: 1 / -1;
             text-align: center;
@@ -316,7 +317,7 @@
             border: 2px dashed #dce2ec;
         }
 
-        /* ===== التذييل ===== */
+        /* Footer */
         .footer {
             margin-top: 50px;
             padding: 25px 20px 20px;
@@ -359,7 +360,6 @@
         .footer-brand .name {
             color: #2563eb;
             font-weight: 700;
-            font-size: 1.2rem;
         }
 
         .footer-sub {
@@ -372,10 +372,6 @@
             justify-content: center;
         }
 
-        .footer-sub i {
-            color: #2563eb;
-        }
-
         .footer-divider {
             width: 60px;
             height: 3px;
@@ -384,7 +380,6 @@
             margin: 4px auto;
         }
 
-        /* ===== إحصائيات ===== */
         .stats {
             text-align: center;
             color: #94a3b8;
@@ -393,7 +388,7 @@
             padding: 12px;
         }
 
-        /* ===== استجابة ===== */
+        /* Responsive */
         @media (max-width: 768px) {
             .app-header {
                 flex-direction: column;
@@ -414,7 +409,7 @@
             }
 
             h1 {
-                font-size: 1.6rem;
+                font-size: 1.5rem;
             }
 
             .header-stats {
@@ -423,23 +418,18 @@
                 padding: 6px 14px;
             }
 
-            .offline-badge {
-                font-size: 0.6rem;
-                padding: 3px 12px;
-            }
-
             .products-grid {
                 grid-template-columns: 1fr 1fr;
                 gap: 14px;
             }
 
             .product-card {
-                padding: 16px 14px;
+                padding: 14px 12px;
             }
 
             .product-name {
-                font-size: 1rem;
-                min-height: 2.6rem;
+                font-size: 0.95rem;
+                min-height: 2.4rem;
             }
 
             .product-price {
@@ -447,19 +437,8 @@
                 padding: 2px 14px;
             }
 
-            .price-label {
-                font-size: 0.7rem;
-                padding: 2px 10px;
-            }
-
-            .footer-brand {
-                font-size: 0.95rem;
-            }
-
-            .footer-brand .signature-icon {
-                width: 36px;
-                height: 36px;
-                font-size: 1rem;
+            .product-details {
+                font-size: 0.8rem;
             }
         }
 
@@ -483,7 +462,7 @@
 <body>
 
     <div class="container">
-        <!-- ===== رأس التطبيق مع شعار ===== -->
+        <!-- Header -->
         <div class="app-header">
             <div class="logo-section">
                 <div class="app-logo">
@@ -503,8 +482,6 @@
                 <span class="count" id="productCount">0</span>
                 <span style="color:#94a3b8;">من</span>
                 <span class="count" id="totalCount">0</span>
-                <i class="fas fa-chevron-left" style="font-size:0.6rem; color:#d1d9e6;"></i>
-                <i class="fas fa-search" style="color:#2563eb;"></i>
             </div>
         </div>
 
@@ -513,18 +490,18 @@
             جميع المنتجات محدثة — سعر البيع للمستهلك
         </div>
 
-        <!-- ===== البحث ===== -->
+        <!-- Search -->
         <div class="search-wrap">
             <div class="search-wrapper">
                 <i class="fas fa-search search-icon"></i>
-                <input type="text" id="searchInput" class="search-box" placeholder="ابحث عن منتج ..." autofocus>
+                <input type="text" id="searchInput" class="search-box" placeholder="ابحث عن منتج بالاسم أو الرقم ..." autofocus>
                 <span class="search-clear" id="clearSearch" title="مسح البحث">
                     <i class="fas fa-times"></i>
                 </span>
             </div>
         </div>
 
-        <!-- ===== شبكة المنتجات ===== -->
+        <!-- Products Grid -->
         <div class="products-grid" id="productGrid">
             <!-- يتم الملء بواسطة JavaScript -->
         </div>
@@ -535,7 +512,7 @@
         </div>
     </div>
 
-    <!-- ===== التذييل مع بصمة مصطفى علوان ===== -->
+    <!-- Footer -->
     <div class="footer">
         <div class="footer-content">
             <div class="footer-divider"></div>
@@ -565,81 +542,216 @@
     </div>
 
     <script>
-        // ==========================================
-        // بيانات المنتجات
-        // ==========================================
+        // ============================================================
+        // بيانات المنتجات الجديدة (201 منتج مع ID فريد)
+        // ============================================================
         const products = [
-            { name: "بخاخة", price: "٢٥" },
-            { name: "ديتول", price: "١٧٥" },
-            { name: "مكن دراكو حريمي", price: "١٠ (للمكنة)" },
-            { name: "مكن دراكو رجالي", price: "٥ (للمكنة)" },
-            { name: "مكن في اي بي", price: "٥-٦ (للمكنة)" },
-            { name: "سويت ٣ في ١ صن", price: "١٥" },
-            { name: "سويت حرير مسعر", price: "٢٠" },
-            { name: "كريم ون", price: "٢٥" },
-            { name: "شفرات فلامنجو", price: "٢٥" },
-            { name: "سيجنال صغير", price: "١٧" },
-            { name: "سيجنال وسط", price: "٣٠" },
-            { name: "معجون مسواك وسط", price: "٢٥ - ٣٠" },
-            { name: "معجون مسواك كبير", price: "٤٠ : ٤٥" },
-            { name: "سيجنال فحم وسط", price: "٣٥" },
-            { name: "سيجنال فحم كبير", price: "٦٠ : ٦٥" },
-            { name: "كلوز اب صغير", price: "١٨" },
-            { name: "كلوز آب وسط", price: "٣٠ : ٣٢" },
-            { name: "كلوز أب كبير", price: "٥٥" },
-            { name: "ليفة كف", price: "٣٠ : ٣٥" },
-            { name: "ليفة ضهر", price: "٣٠ : ٣٥" },
-            { name: "ليفة كف مستوردة", price: "٣٥ : ٤٠" },
-            { name: "ليفة شاور مدوره", price: "٢٠" },
-            { name: "فرشة اسنان مستورده كبار", price: "٢٥ : ٣٠" },
-            { name: "فرشة اسنان عاديه كبار", price: "١٥" },
-            { name: "فرشة اسنان عاديه اطفال", price: "١٥" },
-            { name: "استاند برفان (الزجاجة)", price: "٣٠" },
-            { name: "أمواس حلاقة لورد", price: "القطعة ١٥ : ١٨" },
-            { name: "اسبرنج مزيل عرق", price: "٣٥" },
-            { name: "بريل", price: "٣" },
-            { name: "بخور ناموس", price: "١٠ (للقرص)" },
-            { name: "مناديل مبلله صغير ١٥ منديل", price: "٧" },
-            { name: "ليفة ذكيه", price: "١٥" },
-            { name: "بخور مسك الحرمين", price: "١٥" },
-            { name: "بخور اخضر مزاج", price: "١٥" },
-            { name: "ليفه مواعين اسود ٣×١", price: "١٥" },
-            { name: "ليفه مستورده ٣×١", price: "٢٠" },
-            { name: "مناديل سمايل", price: "٥٠" },
-            { name: "زينه جيب", price: "٢.٥" },
-            { name: "هاريبك", price: "٣٠" },
-            { name: "كيروكس للحشرات", price: "٩٠ - ٩٥" },
-            { name: "راجون بودره", price: "٢٥" },
-            { name: "عجينه صراصير", price: "٣٠" },
-            { name: "كلوركس ابيض لتر", price: "٣٠" },
-            { name: "كلوركس الوان لتر", price: "٦٥ - ٧٠" },
-            { name: "بريكس الوان لتر", price: "٥٥" },
-            { name: "بريكس ابيض لتر", price: "٢٥" },
-            { name: "كلوركس الوان ٢لتر", price: "١٣٠" },
-            { name: "اكتفيا لتر", price: "٤٥" },
-            { name: "ملمع بليدج خشب", price: "٧٠" },
-            { name: "فريدا خشب", price: "٦٥ - ٧٠" },
-            { name: "فنيك العاشر", price: "٤٧" },
-            { name: "فريدا ملمع زجاج", price: "٦٥" },
-            { name: "ملمع زجاج تاتش", price: "٣٥ - ٤٠" },
-            { name: "وفير ٤ لتر", price: "١٣٠" },
-            { name: "برسيل چل ٧٠٠مل", price: "٥٥" },
-            { name: "اوكسي سائل ٤٠٠مل", price: "٢٥" },
-            { name: "صابونة لوكس", price: "٢٠" },
-            { name: "صابونة كاميه", price: "٢٠" },
-            { name: "صابونة رويال", price: "١٨" },
-            { name: "صابونة انجلش", price: "١٨" },
-            { name: "صابونة سافانا", price: "١٧" },
-            { name: "صابونة ريفولي", price: "١٥" },
-            { name: "صابونة ريفولي كبيرة ١٦٥ جم", price: "٢٥" },
-            { name: "صابونة جوي", price: "١٥" },
-            { name: "صابونة دوش ١١٥ جم", price: "١٤" },
-            { name: "صابونة دوش الصغيرة ٦٠ جم", price: "٨" }
+            { id: 1, name: "اوكسي اوتوماتيك كيلو ٢.٥", qty: 2, wholesale: 188, retail: "٢٠٠ - ٢١٠" },
+            { id: 2, name: "اوكسي اوتوماتيك ٢.٥ كيلو + ٤٠٠ جم", qty: 2, wholesale: 205, retail: "٢٣٠" },
+            { id: 3, name: "برسيل اوتوماتيك كيلو ٢.٥", qty: 2, wholesale: 192, retail: "٢١٠" },
+            { id: 4, name: "اريال اوتوماتيك ٢.٥ كيلو", qty: 2, wholesale: 215, retail: "٢٤٠" },
+            { id: 5, name: "تايد اوتوماتيك كيلو ٢.٥", qty: 2, wholesale: 180, retail: "١٩٥" },
+            { id: 6, name: "باهي اوتوماتيك كيلو ٢.٥ + ٣٠٠ جم", qty: 1, wholesale: 160, retail: "١٧٥" },
+            { id: 7, name: "عرض صابون ديتول - ١٦٥ ١٤ جم", qty: 4, wholesale: 150, retail: "٤٠ - ٤٢" },
+            { id: 8, name: "عرض صابون ديتول ١٤ - ١١٥ جم", qty: 2, wholesale: 107, retail: "٣٠" },
+            { id: 9, name: "بالة مناديل بابيا سحب ٥٠٠ منديل", qty: 1, wholesale: 560, retail: "٣٥" },
+            { id: 10, name: "بالة مناديل قطونيل سحب ٥٢٥ منديل", qty: 1, wholesale: 385, retail: "٢٥" },
+            { id: 11, name: "بالة مناديل فاميليا سحب ٥٠٠ منديل", qty: 1, wholesale: 475, retail: "٣٠" },
+            { id: 12, name: "بالة فاميليا رول ٦ مطبخ اخضر", qty: 1, wholesale: 260, retail: "-" },
+            { id: 13, name: "بالة فاميليا ٦ رول مطبخ ازرق", qty: 1, wholesale: 230, retail: "-" },
+            { id: 14, name: "بالة فاين ٦ رول مطبخ اخضر", qty: 1, wholesale: 255, retail: "-" },
+            { id: 15, name: "بالة زينة ٦ رول مطبخ", qty: 1, wholesale: 245, retail: "-" },
+            { id: 16, name: "بالة فاين دويتو تواليت", qty: 1, wholesale: 350, retail: "-" },
+            { id: 17, name: "بالة فاين تواليت ۲ رول", qty: 1, wholesale: 195, retail: "-" },
+            { id: 18, name: "اريال اوتوماتيك كيلو ٩", qty: 1, wholesale: 530, retail: "٥٥٠" },
+            { id: 19, name: "اوكسي اوتوماتيك كيلو ٩", qty: 1, wholesale: 515, retail: "٥٣٠" },
+            { id: 20, name: "باهي اوتوماتيك كيلو ٩", qty: 1, wholesale: 465, retail: "٤٨٠" },
+            { id: 21, name: "تايد اوتوماتيك كيلو ٩", qty: 1, wholesale: 475, retail: "٤٩٠" },
+            { id: 22, name: "بونكس اوتوماتيك كيلو ٩", qty: 1, wholesale: 415, retail: "٤٣٠" },
+            { id: 23, name: "برسيل اوتوماتيك كيلو ١٠", qty: 1, wholesale: 600, retail: "٦٢٠" },
+            { id: 24, name: "معطر جو بخاخ فريدة ٤٦٠ مل", qty: 2, wholesale: 653, retail: "٦٠" },
+            { id: 25, name: "عرض مناديل سمایل اصفر", qty: 13, wholesale: 3, retail: "٤٣-١٢٩" },
+            { id: 26, name: "چركن فيبا ٤ كيلو", qty: 2, wholesale: 142.5, retail: "١٥٠ - ١٥٥" },
+            { id: 27, name: "چركن فيبا ٤ كيلو + ٦٠٠ جم هدية", qty: 2, wholesale: 163, retail: "١٧٠" },
+            { id: 28, name: "چركن فيبا ٣ كيلو", qty: 2, wholesale: 117, retail: "١٢٥" },
+            { id: 29, name: "كرتونة اوكسي منظف اطباق سايل ٦٠٠ مل", qty: 1, wholesale: 308, retail: "٢٨" },
+            { id: 30, name: "كرتونة اوكسي منظف اطباق سايل لتر ۱", qty: 1, wholesale: 460, retail: "٧٠" },
+            { id: 31, name: "كرتونة بريل منظف اطباق ٦٠٠ مل", qty: 1, wholesale: 366, retail: "٣٣" },
+            { id: 32, name: "كرتونة بريل التر صاروخ", qty: 1, wholesale: 585, retail: "٧٠" },
+            { id: 33, name: "برطمان اللهلوبة متعدد الاغراض", qty: 1, wholesale: 244, retail: "٥٠" },
+            { id: 34, name: "باور مزيل الدهون", qty: 6, wholesale: 44, retail: "٥٠" },
+            { id: 35, name: "لاستر مزيل دهون", qty: 6, wholesale: 75, retail: "٨٥" },
+            { id: 36, name: "زجاجة شامبو سجاد فايتر فلاش", qty: 4, wholesale: 65, retail: "٧٥" },
+            { id: 37, name: "زجاجة مسلك بالوعات فايتر فلاش", qty: 3, wholesale: 65, retail: "-" },
+            { id: 38, name: "فايتر فلاش مزيل الدهون متعدد الاغراض", qty: 6, wholesale: 65, retail: "٧٥" },
+            { id: 39, name: "زجاجة معطر ارضية فريدا هووم ٤٨٠ مل", qty: 1, wholesale: 242, retail: "٥٠" },
+            { id: 40, name: "شاور جل دوش ٦٠٠ مل", qty: 4, wholesale: 52, retail: "٦٠ - ٦٥" },
+            { id: 41, name: "شاور جل دوش ١ لتر", qty: 4, wholesale: 80, retail: "٩٥" },
+            { id: 42, name: "شاور جل فريدا ٦٥٠ مل", qty: 8, wholesale: 80, retail: "-" },
+            { id: 43, name: "شاور جل فريدة ١.٢ لتر", qty: 9, wholesale: 135, retail: "١٤٥ - ١٥٠" },
+            { id: 44, name: "غسول الأيدين هاند ووش ريفولي", qty: 2, wholesale: 58, retail: "٦٥ - ٧٠" },
+            { id: 45, name: "غسول الأيدين هاند ووش فريدا عرض", qty: 4, wholesale: 82, retail: "-" },
+            { id: 46, name: "چركن فريدا داوني لتر ۲", qty: 4, wholesale: 85, retail: "٩٠ - ٩٥" },
+            { id: 47, name: "چركن فريدا داوني لتر ٤", qty: 4, wholesale: 140, retail: "١٥٠ - ١٦٠" },
+            { id: 48, name: "فريدا فلور مطهر ومعطر ارضيات لتر ۲", qty: 2, wholesale: 87, retail: "٩٥" },
+            { id: 49, name: "كرتونة باهي جل الوان ٥ جنيه", qty: 2, wholesale: 77, retail: "-" },
+            { id: 50, name: "كرتونة برسيل جل ٥ جنيه", qty: 2, wholesale: 80, retail: "-" },
+            { id: 51, name: "كرتونة برسيل جل اسود ٣ جنيه", qty: 2, wholesale: 95, retail: "-" },
+            { id: 52, name: "كرتونة برسيل جل ١٠ جنيه", qty: 1, wholesale: 105, retail: "-" },
+            { id: 53, name: "دستة مورال ملمع أثاث", qty: 1, wholesale: 550, retail: "٦٠" },
+            { id: 54, name: "باهي ٥ جنيه", qty: 2, wholesale: 102, retail: "-" },
+            { id: 55, name: "كرتونة باهي ١٠ جنيه", qty: 2, wholesale: 103, retail: "-" },
+            { id: 56, name: "كرتونة باهي ١٥ جنيه", qty: 2, wholesale: 105, retail: "-" },
+            { id: 57, name: "كرتونة باهي ٢٠ جنيه", qty: 2, wholesale: 140, retail: "-" },
+            { id: 58, name: "كرتونة باهي ٢٥ جنيه", qty: 2, wholesale: 130, retail: "-" },
+            { id: 59, name: "كرتونة باهي كيلو ١", qty: 1, wholesale: 255, retail: "٧٠" },
+            { id: 60, name: "كرتونة باهي كيلو ١.٥", qty: 1, wholesale: 300, retail: "٩٥ - ١٠٠" },
+            { id: 61, name: "كرتونة باهي كيلو ٢", qty: 1, wholesale: 490, retail: "١٢٥" },
+            { id: 62, name: "كرتونة اوكسي ٥ جنيه", qty: 2, wholesale: 140, retail: "-" },
+            { id: 63, name: "كرتونة اوكسي ١٠ جنيه", qty: 2, wholesale: 220, retail: "-" },
+            { id: 64, name: "كرتونة اوكسي ١٥ جنيه", qty: 2, wholesale: 160, retail: "-" },
+            { id: 65, name: "كرتونة اوكسي ٢٠ جنيه", qty: 2, wholesale: 146, retail: "-" },
+            { id: 66, name: "كرتونة اوكسي ٢٥ جنيه", qty: 2, wholesale: 184, retail: "-" },
+            { id: 67, name: "كرتونة اوكسي كيلو ١", qty: 1, wholesale: 440, retail: "٨٠" },
+            { id: 68, name: "كرتونة اوكسي ١.٥ كيلو", qty: 1, wholesale: 430, retail: "١٢٠ - ١٢٥" },
+            { id: 69, name: "كرتونة اوكسي ٢ كيلو", qty: 1, wholesale: 555, retail: "١٤٥" },
+            { id: 70, name: "كرتونة اريال ١٠ جنيه", qty: 2, wholesale: 140, retail: "-" },
+            { id: 71, name: "كرتونة اريال ٣٠ جنيه", qty: 1, wholesale: 147, retail: "-" },
+            { id: 72, name: "شكارة فل 9 كجم", qty: 1, wholesale: 218, retail: "-" },
+            { id: 73, name: "كرتونة اريال ٥ جنيه", qty: 2, wholesale: 103, retail: "-" },
+            { id: 74, name: "كرتونة ليندو ٥ جنيه", qty: 2, wholesale: 102, retail: "-" },
+            { id: 75, name: "كرتونة ليندو ١٠ جنيه", qty: 2, wholesale: 102, retail: "-" },
+            { id: 76, name: "كرتونة ليندو كيلو ١", qty: 1, wholesale: 252, retail: "٧٠" },
+            { id: 77, name: "كرتونة ليندو كيلو ٢", qty: 2, wholesale: 470, retail: "١٢٥" },
+            { id: 78, name: "كلوركس ظرف ١٠ جنيه ابيض", qty: 1, wholesale: 220, retail: "-" },
+            { id: 79, name: "كرتونة كلوركس ظرف ١٠ جنيه الوان", qty: 1, wholesale: 220, retail: "-" },
+            { id: 80, name: "كرتونة فلاش الهلال", qty: 1, wholesale: 80, retail: "١٠" },
+            { id: 81, name: "فانيش سائل مزيل بقع ٤٠ جم", qty: 1, wholesale: 330, retail: "١٥" },
+            { id: 82, name: "فانيش بودر مزيل بقع", qty: 1, wholesale: 270, retail: "١٥" },
+            { id: 83, name: "فانيش سائل مزيل بقع 100 جم", qty: 1, wholesale: 640, retail: "٣٣" },
+            { id: 84, name: "علبة بريكس بودر مزيل بقع", qty: 2, wholesale: 85, retail: "٥" },
+            { id: 85, name: "كرتونة صابون سافانا كلاسيك", qty: 1, wholesale: 700, retail: "١٧" },
+            { id: 86, name: "كرتونة صابون رويال", qty: 1, wholesale: 750, retail: "١٨-٢٠" },
+            { id: 87, name: "كرتونة صابون ريفولي", qty: 1, wholesale: 625, retail: "١٥" },
+            { id: 88, name: "كرتونة صابون جوي", qty: 1, wholesale: 625, retail: "١٥" },
+            { id: 89, name: "كرتونة صابون انجلش", qty: 2, wholesale: 750, retail: "١٨" },
+            { id: 90, name: "كرتونة صابون لوكس", qty: 1, wholesale: 860, retail: "٢٠" },
+            { id: 91, name: "كرتونة صابون دوش ٦٠ جم", qty: 1, wholesale: 310, retail: "٨" },
+            { id: 92, name: "كرتونة صابون دوش", qty: 1, wholesale: 565, retail: "١٤" },
+            { id: 93, name: "كرتونة صابون كامي", qty: 1, wholesale: 830, retail: "٢٠" },
+            { id: 94, name: "دستة مبيد حشري نيو بيرسول ٣٠٠ مل", qty: 1, wholesale: 575, retail: "٥٠ - ٥٥" },
+            { id: 95, name: "دستة مبيد حشرات طائرة راجون ٣٠٠ مل", qty: 1, wholesale: 470, retail: "٤٥" },
+            { id: 96, name: "كرتونة ماكس كيلر مبيد حشرات زاحفة", qty: 1, wholesale: 375, retail: "٣٥ - ٤٠" },
+            { id: 97, name: "كرتونة مبيد حشري لعنة الفراعنة", qty: 1, wholesale: 240, retail: "٢٥" },
+            { id: 98, name: "كرتونة برسيل ٥ جنيه", qty: 2, wholesale: 103, retail: "-" },
+            { id: 99, name: "كرتونة برسيل ١٠ جنيه", qty: 2, wholesale: 140, retail: "-" },
+            { id: 100, name: "كرتونة برسيل ٢٥ جنيه", qty: 1, wholesale: 185, retail: "-" },
+            { id: 101, name: "كرتونة صابون شمس", qty: 1, wholesale: 350, retail: "١٠ - ١٢" },
+            { id: 102, name: "كرتونة باهي ٣٠ جنيه", qty: 2, wholesale: 150, retail: "-" },
+            { id: 103, name: "شنطة حفاضات سيتي بيبي مقاس ٣", qty: 2, wholesale: 178, retail: "-" },
+            { id: 104, name: "شنطة حفاضات سيتي بيبي مقاس ٤", qty: 2, wholesale: 180, retail: "-" },
+            { id: 105, name: "شنطة حفاضات سيتي بيبي مقاس ٥", qty: 2, wholesale: 190, retail: "-" },
+            { id: 106, name: "بخاخه فاضية", qty: 1, wholesale: 28, retail: "٢٥" },
+            { id: 107, name: "زجاجة ديتول ٢٥٠ مل", qty: 3, wholesale: 160, retail: "١٧٥" },
+            { id: 108, name: "مكن دروكو حريمي", qty: 6, wholesale: 20, retail: "١٠" },
+            { id: 109, name: "مكن حلاقة دروكو رجالي", qty: 6, wholesale: 18, retail: "٥" },
+            { id: 110, name: "علبة مكن حلاقة vip", qty: 1, wholesale: 225, retail: "٥ - ٦" },
+            { id: 111, name: "سويت صن لاين كيسة لازالة الشعر", qty: 1, wholesale: 212, retail: "١٥" },
+            { id: 112, name: "سويت حرير أصلي علبة لازالة الشعر", qty: 1, wholesale: 215, retail: "٢٠" },
+            { id: 113, name: "كريم ون لازالة الشعر", qty: 1, wholesale: 218, retail: "٢٥" },
+            { id: 114, name: "شفرات فلامنجو", qty: 1, wholesale: 215, retail: "٢٥" },
+            { id: 115, name: "معجون اسنان سيجنال صغير", qty: 6, wholesale: 13.5, retail: "١٧" },
+            { id: 116, name: "معجون اسنان سيجنال وسط", qty: 6, wholesale: 23.5, retail: "-" },
+            { id: 117, name: "معجون اسنان المسواك وسط ٥٠ جم", qty: 9, wholesale: 17.5, retail: "٢٥ - ٣٠" },
+            { id: 118, name: "معجون اسنان المسواك كبير ١٠٠ جم", qty: 9, wholesale: 33.5, retail: "٤٠ - ٤٥" },
+            { id: 119, name: "معجون اسنان سيجنال فحم كبير ١٠٠ مل", qty: 3, wholesale: 50, retail: "٣٥" },
+            { id: 120, name: "معجون اسنان سيجنال فحم وسط ٥٠ مل", qty: 3, wholesale: 29, retail: "٣٥" },
+            { id: 121, name: "معجون اسنان كلوز آب صغير", qty: 6, wholesale: 13.5, retail: "١٨" },
+            { id: 122, name: "معجون اسنان كلوز آب ٥٠ مل وسط", qty: 6, wholesale: 25, retail: "٣٥" },
+            { id: 123, name: "معجون اسنان كلوز آب كبير ١٠٠ مل", qty: 3, wholesale: 43, retail: "٥٥ - ٦٠" },
+            { id: 124, name: "ليفة استحمام كف", qty: 1, wholesale: 224, retail: "٣٠ - ٣٥" },
+            { id: 125, name: "ليفة استحمام ظهر", qty: 1, wholesale: 224, retail: "-" },
+            { id: 126, name: "ليفة استحمام كف مستورد", qty: 1, wholesale: 225, retail: "-" },
+            { id: 127, name: "ليفة إستحمام شاور مدورة", qty: 1, wholesale: 214, retail: "٢٠" },
+            { id: 128, name: "فرشاة اسنان كبار مستوردة", qty: 1, wholesale: 217.5, retail: "-" },
+            { id: 129, name: "فرشاة اسنان كبار عادية", qty: 1, wholesale: 28, retail: "١٥" },
+            { id: 130, name: "فرشاة اسنان اطفال عادية", qty: 1, wholesale: 28, retail: "١٥" },
+            { id: 131, name: "استاند برفان ٢٤ ق", qty: 2, wholesale: 424, retail: "-" },
+            { id: 132, name: "امواس مكنة الحلاقة لورد", qty: 1, wholesale: 260, retail: "-" },
+            { id: 133, name: "اسبرينج ماي واي مزيل عرق", qty: 50, wholesale: 29, retail: "٣٥" },
+            { id: 134, name: "كرتونة بريل أكياس ٣٥ جم سلاسل", qty: 2, wholesale: 115, retail: "٣" },
+            { id: 135, name: "علبة بخور ناموس", qty: 3, wholesale: 90, retail: "١٠" },
+            { id: 136, name: "علبة مناديل مبللة رونزا ١٥ منديل", qty: 1, wholesale: 160, retail: "-" },
+            { id: 137, name: "ليفة مواعين ذكية أي سبونج", qty: 1, wholesale: 280, retail: "١٥" },
+            { id: 138, name: "بخور مسك الحرمين", qty: 1, wholesale: 100, retail: "-" },
+            { id: 139, name: "علبة بخور مزاج اخضر", qty: 1, wholesale: 100, retail: "١٥" },
+            { id: 140, name: "ليفة مواعين أسود", qty: 1, wholesale: 120, retail: "١٥" },
+            { id: 141, name: "ليفة مواعين ناعمة مستوردة", qty: 1, wholesale: 180, retail: "٢٠" },
+            { id: 142, name: "برسيل جل اوتوماتيك ٢.٥ كجم الوان", qty: 2, wholesale: 210, retail: "٢٣٠" },
+            { id: 143, name: "برسيل جل اوتوماتيك ٢.٥ كجم اسود", qty: 2, wholesale: 190, retail: "٢٠٠ - ٢١٠" },
+            { id: 144, name: "اوكسي جل اوتوماتيك ٢.٥ كجم الوان", qty: 2, wholesale: 182, retail: "١٩٥ - ٢٠٠" },
+            { id: 145, name: "اوكسي جل اوتوماتيك ٢.٥ كجم اسود", qty: 2, wholesale: 182, retail: "-" },
+            { id: 146, name: "تايد جل اوتوماتيك ٢.٥ كجم الوان", qty: 2, wholesale: 180, retail: "١٩٠ - ١٩٥" },
+            { id: 147, name: "اريال جل اوتوماتيك ٢.٥ كيلو", qty: 2, wholesale: 203, retail: "٢٢٠ - ٢٣٠" },
+            { id: 148, name: "لفة سلك مواعين ٥ كيلو نصار ألماني", qty: 1, wholesale: 300, retail: "١٢" },
+            { id: 149, name: "شاور جل ماي واي ۲ لتر عبير الزهور", qty: 2, wholesale: 97, retail: "١١٠-١١٥" },
+            { id: 150, name: "شاور جل ماي واي ۲ لتر سهر الليالي", qty: 2, wholesale: 97, retail: "١١٠-١١٥" },
+            { id: 151, name: "شاور جل ماي واي ۲ لتر بنفسج", qty: 2, wholesale: 97, retail: "١١٠ - ١١٥" },
+            { id: 152, name: "شاور جل ماي واي ۲ لتر خوخ", qty: 2, wholesale: 97, retail: "١١٠ - ١١٥" },
+            { id: 153, name: "شاور جل ماي واي ۲ لتر إشراقة", qty: 2, wholesale: 100, retail: "١١٥" },
+            { id: 154, name: "شاور جل ماي واي ۲ لتر تندر", qty: 2, wholesale: 110, retail: "١٣٠" },
+            { id: 155, name: "صوفي فوط صحية طويل", qty: 8, wholesale: 85, retail: "٥٠ / عرض ٩٥" },
+            { id: 156, name: "كرتونة صوفي فوط صحية طويل جداً", qty: 8, wholesale: 85, retail: "٥٠ / عرض ٩٥" },
+            { id: 157, name: "حصيرة سلك مدور نوفا استلس أصلي", qty: 3, wholesale: 50, retail: "٥ - ٦" },
+            { id: 158, name: "أولويز دبل مقاسات طويل وطويل جداً", qty: 30, wholesale: 47, retail: "٥٥" },
+            { id: 159, name: "أولويز مفرد مقاسات طويل وطويل جداً", qty: 10, wholesale: 27.5, retail: "-" },
+            { id: 160, name: "كرتونة شامبو سباركل كبيرة أكياس", qty: 1, wholesale: 300, retail: "١" },
+            { id: 161, name: "كرتونة شامبو صان سيلك أكياس", qty: 1, wholesale: 270, retail: "١.٥" },
+            { id: 162, name: "بالة مناديل إسمايل سحب", qty: 1, wholesale: 260, retail: "١٨ قطعة / ٥٠ عرض" },
+            { id: 163, name: "كرتونة مناديل زينة جيب", qty: 2, wholesale: 185, retail: "٢.٥ قطعة / ٢٠-٢٥ شرنك" },
+            { id: 164, name: "كرتونة هاربيك منظف حمامات", qty: 1, wholesale: 224, retail: "٣٠" },
+            { id: 165, name: "كيروكس مبيد حشرات زاحفة", qty: 6, wholesale: 83, retail: "٩٠-٩٥" },
+            { id: 166, name: "دستة مبيد حشرات راجون بودرة ١٢٠ جم", qty: 1, wholesale: 195, retail: "٢٥" },
+            { id: 167, name: "عجينة صراصير صغيرة", qty: 6, wholesale: 25, retail: "٣٠" },
+            { id: 168, name: "كلوركس أبيض لتر", qty: 8, wholesale: 26.5, retail: "٣٠" },
+            { id: 169, name: "كلوركس ألوان ١ لتر", qty: 8, wholesale: 62, retail: "٦٥ - ٧٠" },
+            { id: 170, name: "بريكس ألوان لتر ١", qty: 8, wholesale: 46, retail: "-" },
+            { id: 171, name: "بريكس أبيض ١ لتر", qty: 8, wholesale: 21, retail: "٢٥" },
+            { id: 172, name: "كلوركس ألوان ۲ لتر", qty: 4, wholesale: 121, retail: "١٣٠" },
+            { id: 173, name: "أكتيفا لتر ١ ألوان", qty: 8, wholesale: 35, retail: "٤٥" },
+            { id: 174, name: "بليدج ملمع أثاث", qty: 6, wholesale: 63, retail: "٧٠" },
+            { id: 175, name: "فريدا خشب ملمع أثاث", qty: 6, wholesale: 59, retail: "٦٥ - ٧٠" },
+            { id: 176, name: "فنيك العاشر", qty: 1, wholesale: 240, retail: "٤٧" },
+            { id: 177, name: "فريدا ملمع زجاج", qty: 6, wholesale: 53, retail: "٦٥" },
+            { id: 178, name: "عرض ملمع زجاج تاتش", qty: 6, wholesale: 25, retail: "٣٥ - ٤٠" },
+            { id: 179, name: "چركن وفير منظف أطباق ٤ كيلو", qty: 4, wholesale: 120, retail: "١٣٠" },
+            { id: 180, name: "كرتونة برسيل جل ظرف ٧٠٠ مل", qty: 1, wholesale: 410, retail: "٥٥" },
+            { id: 181, name: "كرتونة اوكسي سائل ٤٠٠ جم ظرف", qty: 1, wholesale: 240, retail: "٢٥" },
+            { id: 182, name: "كريم حلاقة 5 خمسات", qty: 3, wholesale: 17.5, retail: "٢٥" },
+            { id: 183, name: "كريم حلاقة 3 خمسات", qty: 3, wholesale: 17.5, retail: "٢٥" },
+            { id: 184, name: "كريم حلاقة تمارا", qty: 3, wholesale: 17.5, retail: "٢٥" },
+            { id: 185, name: "كريم فير اند لافلي صغير", qty: 3, wholesale: 16.5, retail: "٢٠" },
+            { id: 186, name: "بودرة قدم بيور", qty: 1, wholesale: 214, retail: "٢٥" },
+            { id: 187, name: "بودرة أوبال أطفال", qty: 3, wholesale: 17, retail: "٢٥" },
+            { id: 188, name: "قطن أذن كبير ٢٠٠ عود بلاستيك", qty: 6, wholesale: 18, retail: "٢٥ - ٣٠" },
+            { id: 189, name: "كرتونة شاور دوش أكياس", qty: 2, wholesale: 120, retail: "٢.٥" },
+            { id: 190, name: "شامبو أطفال نونو ٣٠٠ مل مشكل", qty: 4, wholesale: 55, retail: "٧٥" },
+            { id: 191, name: "ورقة زجاج بوتجاز لاصق", qty: 6, wholesale: 13.5, retail: "٢٠" },
+            { id: 192, name: "مكعبات مسك", qty: 2, wholesale: 47, retail: "١٠" },
+            { id: 193, name: "غسول للوجه والبشرة إيفونا", qty: 3, wholesale: 25, retail: "٤٠" },
+            { id: 194, name: "مناديل مبللة ٦٠ منديل", qty: 4, wholesale: 16, retail: "٢٠" },
+            { id: 195, name: "مناديل مبللة ١٢٠ منديل", qty: 4, wholesale: 24, retail: "٣٠ - ٣٥" },
+            { id: 196, name: "علبة بخور كبير ٥ ساعات", qty: 6, wholesale: 45, retail: "١٢" },
+            { id: 197, name: "حنة جلوري مشكل ألوان", qty: 18, wholesale: 36, retail: "٤٠" },
+            { id: 198, name: "شريط أكياس جل شعر هيركود", qty: 1, wholesale: 217.5, retail: "٢" },
+            { id: 199, name: "شنطة حفاضات سيتي بيبي مقاس ٦", qty: 2, wholesale: 205, retail: "-" },
+            { id: 200, name: "شنطة حفاضات سيتي بيبي مقاس ٢", qty: 2, wholesale: 155, retail: "-" },
+            { id: 201, name: "كرتونة اريال كيلو ٢", qty: 1, wholesale: 540, retail: "١٤٥" }
         ];
 
-        // ==========================================
+        // ============================================================
         // عناصر DOM
-        // ==========================================
+        // ============================================================
         const grid = document.getElementById('productGrid');
         const searchInput = document.getElementById('searchInput');
         const clearBtn = document.getElementById('clearSearch');
@@ -647,52 +759,49 @@
         const totalCount = document.getElementById('totalCount');
         const statsTotal = document.getElementById('statsTotal');
 
-        // تحديث العدادات
         totalCount.textContent = products.length;
         statsTotal.textContent = products.length;
 
-        // ==========================================
+        // ============================================================
         // دالة الحصول على أيقونة المنتج
-        // ==========================================
+        // ============================================================
         function getProductIcon(name) {
-            if (name.includes('صابونة')) return 'fa-soap';
-            if (name.includes('فرشة')) return 'fa-brush';
-            if (name.includes('معجون') || name.includes('سيجنال')) return 'fa-toothbrush';
-            if (name.includes('ليفة') || name.includes('ليفه')) return 'fa-hand-sparkles';
+            if (name.includes('صابون')) return 'fa-soap';
+            if (name.includes('فرشاة') || name.includes('فرشة')) return 'fa-brush';
+            if (name.includes('معجون')) return 'fa-toothbrush';
+            if (name.includes('ليفة')) return 'fa-hand-sparkles';
             if (name.includes('بخور')) return 'fa-leaf';
             if (name.includes('كلوركس') || name.includes('بريكس')) return 'fa-bottle-water';
             if (name.includes('مكن')) return 'fa-bolt';
-            if (name.includes('شفرات') || name.includes('أمواس')) return 'fa-cut';
+            if (name.includes('شفرات') || name.includes('امواس')) return 'fa-cut';
             if (name.includes('مناديل')) return 'fa-box';
-            if (name.includes('زينه')) return 'fa-crown';
             if (name.includes('ديتول')) return 'fa-shield-halved';
-            if (name.includes('بخاخة')) return 'fa-spray-can-sparkles';
+            if (name.includes('بخاخ')) return 'fa-spray-can-sparkles';
             if (name.includes('كريم')) return 'fa-cream';
             if (name.includes('شاور')) return 'fa-shower';
             if (name.includes('مسواك')) return 'fa-tooth';
-            if (name.includes('استاند')) return 'fa-display';
-            if (name.includes('هاريبك')) return 'fa-bug';
-            if (name.includes('كيروكس')) return 'fa-skull';
-            if (name.includes('راجون')) return 'fa-flask';
-            if (name.includes('عجينه')) return 'fa-jar';
-            if (name.includes('برسيل')) return 'fa-bucket';
-            if (name.includes('اوكسي')) return 'fa-droplet';
-            if (name.includes('وفير')) return 'fa-wind';
-            if (name.includes('بريل')) return 'fa-bolt';
-            if (name.includes('زينه')) return 'fa-gem';
-            if (name.includes('كلوز')) return 'fa-mouth';
+            if (name.includes('حفاضات')) return 'fa-baby';
+            if (name.includes('مبيد') || name.includes('حشرات')) return 'fa-bug';
+            if (name.includes('بريل') || name.includes('منظف')) return 'fa-bucket';
+            if (name.includes('ملمع')) return 'fa-spray-can';
+            if (name.includes('جل')) return 'fa-droplet';
+            if (name.includes('بودرة')) return 'fa-flask';
+            if (name.includes('فوط')) return 'fa-heart';
             return 'fa-cube';
         }
 
-        // ==========================================
+        // ============================================================
         // عرض المنتجات
-        // ==========================================
+        // ============================================================
         function renderProducts(filter = '') {
             const filterLower = filter.trim().toLowerCase();
             let filtered = products;
 
             if (filterLower !== '') {
-                filtered = products.filter(p => p.name.includes(filterLower));
+                filtered = products.filter(p => 
+                    p.name.toLowerCase().includes(filterLower) || 
+                    p.id.toString().includes(filterLower)
+                );
             }
 
             productCount.textContent = filtered.length;
@@ -711,19 +820,22 @@
             let html = '';
             filtered.forEach(p => {
                 const icon = getProductIcon(p.name);
+                const retailDisplay = p.retail && p.retail !== '-' ? p.retail : 'غير محدد';
                 html += `
                     <div class="product-card">
+                        <div class="product-id">#${p.id}</div>
                         <div class="product-name">
                             <i class="fas ${icon}"></i> ${p.name}
+                        </div>
+                        <div class="product-details">
+                            <span class="qty"><i class="fas fa-box"></i> الكمية: ${p.qty}</span>
+                            <span><i class="fas fa-coins"></i> الجملة: ${p.wholesale} جنيه</span>
                         </div>
                         <div class="product-price-wrapper">
                             <span class="price-label">
                                 <i class="fas fa-tag"></i> سعر البيع للمستهلك
                             </span>
-                            <span class="product-price">${p.price} جنيه</span>
-                        </div>
-                        <div class="product-category">
-                            <i class="fas fa-coin" style="margin-left: 6px;"></i> السعر النهائي
+                            <span class="product-price">${retailDisplay} جنيه</span>
                         </div>
                     </div>
                 `;
@@ -732,9 +844,9 @@
             grid.innerHTML = html;
         }
 
-        // ==========================================
+        // ============================================================
         // أحداث البحث
-        // ==========================================
+        // ============================================================
         searchInput.addEventListener('input', function() {
             const val = this.value;
             renderProducts(val);
@@ -748,19 +860,19 @@
             searchInput.focus();
         });
 
-        // ==========================================
+        // ============================================================
         // إظهار السنة الحالية في التذييل
-        // ==========================================
+        // ============================================================
         document.getElementById('currentYear').textContent = new Date().getFullYear();
 
-        // ==========================================
+        // ============================================================
         // العرض الأولي
-        // ==========================================
+        // ============================================================
         renderProducts();
 
-        // ==========================================
+        // ============================================================
         // Service Worker (يعمل بدون إنترنت)
-        // ==========================================
+        // ============================================================
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('sw.js')
                 .then(() => console.log('✅ Service Worker مسجل'))
