@@ -589,7 +589,7 @@
 
     <script>
         // ================================================================
-        //  البيانات
+        //  البيانات (جميع المنتجات - 220 منتج)
         // ================================================================
         const products = [
             { id: 1, name: "اوكسي اوتوماتيك كيلو ٢.٥", qty: 2, wholesale: 188, retail: "٢٠٠ - ٢١٠" },
@@ -792,7 +792,27 @@
             { id: 198, name: "شريط أكياس جل شعر هيركود", qty: 1, wholesale: 217.5, retail: "٢" },
             { id: 199, name: "شنطة حفاضات سيتي بيبي مقاس ٦", qty: 2, wholesale: 205, retail: "٦ للقطعة / ٢١٠ - ٢١٥ للشنطة" },
             { id: 200, name: "شنطة حفاضات سيتي بيبي مقاس ٢", qty: 2, wholesale: 155, retail: " ٥ للقطعة / ١٦٠ - ١٦٥ للشنطة " },
-            { id: 201, name: " اريال كيلو ٢", qty: 1, wholesale: 540, retail: "١٤٥" }
+            { id: 201, name: " اريال كيلو ٢", qty: 1, wholesale: 540, retail: "١٤٥" },
+            // ===== المنتجات الجديدة المضافة =====
+            { id: 202, name: "اوكسي جل ٥ جنيه", qty: 1, wholesale: 75, retail: "5" },
+            { id: 203, name: "اوكسي جل ١٠ جنيه", qty: 1, wholesale: 108, retail: "10" },
+            { id: 204, name: "اوكسي جل ١٥ جنيه", qty: 1, wholesale: 108, retail: "15" },
+            { id: 206, name: "أكياس حمام كريم", qty: 1, wholesale: 8, retail: "10" },
+            { id: 208, name: "علبة كلوركس بودرة مزيل بقع", qty: 1, wholesale: 85, retail: "5" },
+            { id: 209, name: "كريم تفتيح وترطيب البشرة فير آند لافلي ٤٠ جم", qty: 1, wholesale: 29.5, retail: "35" },
+            { id: 210, name: "شامبو فاتيكا ٤٠٠ مل", qty: 1, wholesale: 65, retail: "70 - 75" },
+            { id: 211, name: "شامبو صن سيلك ٣٥٠ مل", qty: 1, wholesale: 68, retail: "75 - 80" },
+            { id: 212, name: "كريم شعر فاتيكا ١٤٠ مل وسط", qty: 1, wholesale: 45, retail: "50 - 55" },
+            { id: 213, name: "سبراي تندر", qty: 1, wholesale: 65, retail: "80 - 90" },
+            { id: 214, name: "شامبو كلير ضد القشرة ١٨٠ مل صغير", qty: 1, wholesale: 65, retail: "75 - 85" },
+            { id: 215, name: "حمام كريم فاتيكا ١ كيلو", qty: 1, wholesale: 108, retail: "120" },
+            { id: 216, name: "إريال أوتوماتيك ١ كيلو", qty: 1, wholesale: 65, retail: "75" },
+            { id: 217, name: "حمام كريم مينك ١ كيلو", qty: 1, wholesale: 105, retail: "115" },
+            { id: 218, name: "كريم هير food مينك ٢٥٠ مل", qty: 1, wholesale: 40.5, retail: "45 - 50" },
+            { id: 219, name: "فازلين مرطب أورال طبي ٧٠ مل وسط", qty: 1, wholesale: 23, retail: "30 - 35" },
+            { id: 220, name: "جل ترطيب كعب الغزال", qty: 1, wholesale: 20, retail: "25" },
+            { id: 221, name: "شاور جل فريدة ٢.٢ لتر", qty: 1, wholesale: 135, retail: "145 - 150" },
+            { id: 222, name: "كريم شعر تمارا", qty: 1, wholesale: 27.5, retail: "35" }
         ];
 
         // ================================================================
@@ -907,7 +927,7 @@
         });
 
         // ================================================================
-        //  حذف الكاش (خاص بالصفحة فقط)
+        //  حذف الكاش
         // ================================================================
         function showToast(msg) {
             toastText.textContent = msg;
@@ -919,14 +939,9 @@
         }
 
         clearCacheBtn.addEventListener('click', async function() {
-            // 1. مسح Cache Storage الخاص بهذه الصفحة (إذا كان Service Worker يستخدمه)
             if ('caches' in window) {
                 try {
                     const cacheNames = await caches.keys();
-                    // نحذف فقط الكاش الذي يحتوي على اسم الصفحة أو الموقع
-                    // نفترض أن الـ cache name يحتوي على "price-list" أو نمسح كل الكاش
-                    // لكن لتجنب مسح كاش مواقع أخرى، نمسح فقط الكاش الذي يخص هذا التطبيق.
-                    // في هذا المثال نمسح كل الكاش (لأنه تطبيق مستقل)
                     for (const name of cacheNames) {
                         if (name.includes('price-list') || name === 'v1' || name.startsWith('sw-cache')) {
                             await caches.delete(name);
@@ -937,18 +952,9 @@
                 }
             }
 
-            // 2. مسح localStorage (إذا كنت تخزن فيه بيانات)
-            //    لكننا لا نخزن أي شيء في localStorage حالياً، لكن يمكنك إضافته.
-            //    localStorage.removeItem('products');
-
-            // 3. مسح sessionStorage (إن وجد)
-            //    sessionStorage.clear();
-
-            // 4. إعادة تحميل الصفحة لسحب أحدث البيانات من السيرفر
-            //    (مع تجاهل الكاش باستخدام cache-busting)
             showToast('جاري تحديث الصفحة ...');
             setTimeout(() => {
-                window.location.reload(true); //强制 من السيرفر
+                window.location.reload(true);
             }, 600);
         });
 
@@ -963,7 +969,7 @@
         renderProducts();
 
         // ================================================================
-        //  Service Worker (يعمل بدون إنترنت)
+        //  Service Worker
         // ================================================================
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('sw.js')
