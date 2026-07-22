@@ -71,7 +71,6 @@ async function deleteProduct(productId) {
 // إضافة منتج جديد
 async function addProduct(productData) {
   try {
-    // إنشاء ID جديد
     const products = await getProducts();
     const maxId = products.reduce((max, p) => {
       const numId = parseInt(p.id);
@@ -80,11 +79,8 @@ async function addProduct(productData) {
     const newId = String(maxId + 1).padStart(3, '0');
     
     productData.id = newId;
-    
-    // إضافة المنتج إلى القائمة
     products.push(productData);
     
-    // حفظ القائمة كاملة
     const success = await saveProducts(products);
     return success ? newId : null;
   } catch (error) {
@@ -103,12 +99,10 @@ async function loginAdmin(email, password) {
     const result = await auth.signInWithEmailAndPassword(email, password);
     const user = result.user;
     
-    // تخزين بيانات الجلسة
     sessionStorage.setItem('isLoggedIn', 'true');
     sessionStorage.setItem('userEmail', user.email);
     sessionStorage.setItem('userId', user.uid);
     
-    // تحديث آخر تسجيل دخول في قاعدة البيانات
     await db.ref(`admin/users/${user.uid}/lastLogin`).set(Date.now());
     
     return true;
@@ -135,7 +129,6 @@ async function logout() {
 function checkAuth() {
   const isLoggedIn = sessionStorage.getItem('isLoggedIn');
   if (!isLoggedIn || isLoggedIn !== 'true') {
-    window.location.href = 'login.html';
     return false;
   }
   return true;
@@ -155,7 +148,6 @@ async function updateUserProfile(displayName) {
         displayName: displayName
       });
       
-      // تحديث في قاعدة البيانات أيضاً
       await db.ref(`admin/users/${user.uid}/displayName`).set(displayName);
       return true;
     }
@@ -181,7 +173,7 @@ async function updateUserPassword(newPassword) {
   }
 }
 
-// جلب بيانات المستخدم من قاعدة البيانات (للمعلومات الإضافية)
+// جلب بيانات المستخدم من قاعدة البيانات
 async function getUserData() {
   try {
     const user = auth.currentUser;
