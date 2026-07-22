@@ -143,18 +143,86 @@ function downloadHTML(content, filename = 'index.html') {
 // تشغيل/إيقاف الهامبرجر
 function toggleHamburger() {
   const nav = document.getElementById('navMenu');
-  nav.classList.toggle('open');
+  if (nav) {
+    nav.classList.toggle('open');
+  }
 }
 
-// إغلاق المينيو عند الضغط على رابط
+// ================================================================
+//  تحديث المينيو بناءً على حالة الدخول
+// ================================================================
+
+function updateNavigation(user) {
+  const navMenu = document.getElementById('navMenu');
+  if (!navMenu) return;
+
+  // تنظيف المينيو الحالي
+  navMenu.innerHTML = '';
+
+  // الروابط الأساسية
+  const links = [
+    { href: 'index.html', icon: 'fa-home', text: 'الرئيسية', active: false }
+  ];
+
+  if (user) {
+    // مستخدم مسجل دخول
+    links.push(
+      { href: 'dashboard.html', icon: 'fa-cog', text: 'لوحة التحكم', active: false },
+      { href: 'profile.html', icon: 'fa-user', text: 'الملف الشخصي', active: false },
+      { href: '#', icon: 'fa-sign-out-alt', text: 'تسجيل الخروج', active: false, onClick: 'logout()', class: 'logout-btn' }
+    );
+  } else {
+    // مستخدم غير مسجل دخول
+    links.push(
+      { href: 'login.html', icon: 'fa-sign-in-alt', text: 'تسجيل الدخول', active: false }
+    );
+  }
+
+  // تحديد الرابط النشط
+  const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+  
+  links.forEach(link => {
+    const isActive = link.href === currentPage || 
+                     (currentPage === '' && link.href === 'index.html');
+    
+    const a = document.createElement('a');
+    a.href = link.href;
+    a.innerHTML = `<i class="fas ${link.icon}"></i> ${link.text}`;
+    
+    if (isActive) {
+      a.classList.add('active');
+    }
+    
+    if (link.class) {
+      a.classList.add(link.class);
+    }
+    
+    if (link.onClick) {
+      a.addEventListener('click', function(e) {
+        e.preventDefault();
+        window[link.onClick]();
+      });
+    }
+    
+    navMenu.appendChild(a);
+  });
+}
+
+// ================================================================
+//  إغلاق المينيو عند الضغط على رابط (للموبايل)
+// ================================================================
+
 document.addEventListener('DOMContentLoaded', function() {
-  const navLinks = document.querySelectorAll('.nav-menu a');
-  navLinks.forEach(link => {
-    link.addEventListener('click', function() {
-      const nav = document.getElementById('navMenu');
-      if (nav && window.innerWidth <= 768) {
+  // إغلاق المينيو عند الضغط على أي رابط
+  document.addEventListener('click', function(e) {
+    const nav = document.getElementById('navMenu');
+    const hamburger = document.querySelector('.hamburger');
+    
+    if (nav && window.innerWidth <= 768) {
+      // إذا كان الضغط خارج المينيو والهامبرجر
+      if (!nav.contains(e.target) && !hamburger?.contains(e.target)) {
         nav.classList.remove('open');
       }
-    });
+    }
   });
 });
