@@ -38,7 +38,7 @@ async function getProducts() {
 // جلب بيانات المدير
 async function getAdmin() {
   try {
-    const snapshot = await db.ref('admins').once('value');
+    const snapshot = await db.ref('admin').once('value');
     const data = snapshot.val();
     return data || null;
   } catch (error) {
