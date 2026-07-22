@@ -3,11 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>لوحة التحكم - منتجات شعلان</title>
+    <title>الملف الشخصي - منتجات شعلان</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#ef4444">
+    <style>
+        .profile-container {
+            max-width: 600px;
+            margin: 40px auto;
+            background: white;
+            padding: 40px 32px;
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-lg);
+            border: 1px solid #eef2f6;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        .profile-container .avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: var(--gradient-main);
+            background-size: 200% 200%;
+            animation: gradientMove 4s ease infinite;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 2.5rem;
+            color: white;
+            box-shadow: 0 8px 32px rgba(239, 68, 68, 0.3);
+        }
+
+        .profile-container h2 {
+            text-align: center;
+            margin-bottom: 6px;
+            color: #0f172a;
+        }
+
+        .profile-container .sub-text {
+            text-align: center;
+            color: #94a3b8;
+            margin-bottom: 28px;
+        }
+
+        .profile-container .user-email-display {
+            text-align: center;
+            color: #475569;
+            margin-bottom: 24px;
+            padding: 12px;
+            background: #f8fafc;
+            border-radius: 12px;
+            font-weight: 500;
+        }
+
+        .profile-container .user-email-display i {
+            color: var(--primary-red);
+            margin-left: 8px;
+        }
+    </style>
 </head>
 <body>
 
@@ -40,178 +95,91 @@
 
             <nav class="nav-menu" id="navMenu">
                 <a href="index.html"><i class="fas fa-home"></i> الرئيسية</a>
-                <a href="dashboard.html" class="active"><i class="fas fa-cog"></i> لوحة التحكم</a>
-                <a href="profile.html"><i class="fas fa-user"></i> الملف الشخصي</a>
+                <a href="dashboard.html"><i class="fas fa-cog"></i> لوحة التحكم</a>
+                <a href="profile.html" class="active"><i class="fas fa-user"></i> الملف الشخصي</a>
                 <a href="#" onclick="logout()" class="logout-btn"><i class="fas fa-sign-out-alt"></i> تسجيل الخروج</a>
             </nav>
         </header>
 
         <div class="sub-head">
-            <i class="fas fa-cog"></i>
-            لوحة التحكم — <span class="highlight">إدارة المنتجات</span>
-            <i class="fas fa-tools"></i>
+            <i class="fas fa-user-circle"></i>
+            الملف الشخصي — <span class="highlight">تعديل البيانات</span>
+            <i class="fas fa-edit"></i>
         </div>
 
-        <!-- ===== Dashboard Controls ===== -->
-        <div class="dashboard-header">
-            <h2><i class="fas fa-boxes"></i> جميع المنتجات</h2>
-            <div style="display:flex; gap:12px; flex-wrap:wrap;">
-                <button class="btn-primary" id="addProductBtn">
-                    <i class="fas fa-plus"></i> إضافة منتج
-                </button>
-                <button class="btn-secondary" id="exportBtn">
-                    <i class="fas fa-file-export"></i> تصدير HTML
-                </button>
-                <button class="btn-secondary" id="refreshBtn">
-                    <i class="fas fa-rotate-right"></i> تحديث
-                </button>
+        <!-- ===== Profile Form ===== -->
+        <div class="profile-container">
+            <div class="avatar">
+                <i class="fas fa-user"></i>
             </div>
-        </div>
+            <h2>الملف الشخصي</h2>
+            <p class="sub-text">يمكنك تعديل اسم المستخدم وكلمة المرور</p>
 
-        <!-- ===== Search ===== -->
-        <div class="search-wrap" style="margin-bottom:20px;">
-            <div class="search-wrapper">
-                <input type="text" id="searchInput" class="search-box" placeholder="ابحث عن منتج بالاسم أو الرقم ...">
-                <i class="fas fa-search search-icon"></i>
-                <span class="search-clear" id="clearSearch">
-                    <i class="fas fa-times"></i>
-                </span>
-            </div>
-        </div>
-
-        <!-- ===== Products Table ===== -->
-        <div class="table-responsive">
-            <table>
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>اسم المنتج</th>
-                        <th>الوحدة</th>
-                        <th>الكمية</th>
-                        <th>سعر الجملة</th>
-                        <th>سعر البيع</th>
-                        <th>الإجراءات</th>
-                    </tr>
-                </thead>
-                <tbody id="productsTableBody">
-                    <tr>
-                        <td colspan="7" style="text-align:center; padding:40px;">
-                            <i class="fas fa-spinner fa-spin" style="font-size:1.5rem; color:var(--primary-red);"></i>
-                            <p style="margin-top:8px; color:#94a3b8;">جاري تحميل المنتجات...</p>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <div class="stats">
-            <i class="fas fa-database"></i>
-            إجمالي المنتجات: <span id="totalProducts">0</span>
-        </div>
-    </div>
-
-    <!-- ===== Modal ===== -->
-    <div class="modal-overlay" id="productModal">
-        <div class="modal">
-            <div class="modal-header">
-                <h3><i class="fas fa-edit"></i> <span id="modalTitle">إضافة منتج جديد</span></h3>
-                <button class="modal-close" id="closeModal">
-                    <i class="fas fa-times"></i>
-                </button>
+            <div class="user-email-display" id="userEmailDisplay">
+                <i class="fas fa-envelope"></i>
+                <span id="userEmail">example@email.com</span>
             </div>
 
-            <form id="productForm">
-                <input type="hidden" id="productId">
+            <form id="profileForm">
+                <div class="form-group">
+                    <label><i class="fas fa-user"></i> اسم المستخدم (العرض)</label>
+                    <div class="input-icon">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="profileDisplayName" placeholder="اسم المستخدم">
+                    </div>
+                    <small style="color:#94a3b8; font-size:0.8rem;">هذا الاسم سيظهر في التطبيق</small>
+                </div>
 
                 <div class="form-group">
-                    <label><i class="fas fa-tag"></i> اسم المنتج</label>
-                    <input type="text" id="productName" placeholder="أدخل اسم المنتج" required>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label><i class="fas fa-box"></i> الوحدة</label>
-                        <select id="productUnit">
-                            <option value="">اختر الوحدة</option>
-                            <option value="كرتونة">كرتونة</option>
-                            <option value="بالة">بالة</option>
-                            <option value="شرنك">شرنك</option>
-                            <option value="دستة">دستة</option>
-                            <option value="قطعة">قطعة</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label><i class="fas fa-cubes"></i> الكمية داخل الوحدة</label>
-                        <input type="number" id="productUnitQty" placeholder="مثال: 12">
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label><i class="fas fa-coins"></i> سعر الجملة (الوحدة)</label>
-                        <input type="number" id="productWholesale" placeholder="سعر الوحدة جملة" required step="0.01">
-                    </div>
-                    <div class="form-group">
-                        <label><i class="fas fa-dollar-sign"></i> سعر البيع للمستهلك</label>
-                        <input type="text" id="productRetail" placeholder="مثال: 100 - 120" required>
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label><i class="fas fa-dollar-sign"></i> سعر القطعة (جملة)</label>
-                        <input type="number" id="productPiecePrice" placeholder="سعر القطعة جملة" step="0.01">
-                    </div>
-                    <div class="form-group">
-                        <label><i class="fas fa-tag"></i> سعر الوحدة (للقطعة)</label>
-                        <input type="number" id="productUnitPrice" placeholder="سعر الوحدة للمستهلك" step="0.01">
+                    <label><i class="fas fa-lock"></i> كلمة المرور الجديدة</label>
+                    <div class="input-icon">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="profilePassword" placeholder="كلمة المرور الجديدة (اتركها فارغة إذا لا تريد التغيير)">
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label><i class="fas fa-align-right"></i> وصف المنتج (اختياري)</label>
-                    <textarea id="productDescription" rows="2" placeholder="وصف قصير للمنتج"></textarea>
+                    <label><i class="fas fa-lock"></i> تأكيد كلمة المرور</label>
+                    <div class="input-icon">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="profilePasswordConfirm" placeholder="أعد كتابة كلمة المرور الجديدة">
+                    </div>
                 </div>
 
-                <div style="display:flex; gap:12px; margin-top:16px;">
-                    <button type="submit" class="btn-primary" style="flex:1; justify-content:center;">
-                        <i class="fas fa-save"></i> حفظ المنتج
-                    </button>
-                    <button type="button" class="btn-secondary" id="cancelModalBtn">
-                        <i class="fas fa-times"></i> إلغاء
-                    </button>
-                </div>
+                <button type="submit" class="btn-primary" style="width:100%; justify-content:center;">
+                    <i class="fas fa-save"></i> حفظ التغييرات
+                </button>
             </form>
         </div>
-    </div>
 
-    <!-- ===== Toast ===== -->
-    <div class="toast-message" id="toastMessage">
-        <i class="fas fa-check-circle"></i>
-        <span id="toastText">تم التحديث بنجاح</span>
-    </div>
-
-    <!-- ===== Footer ===== -->
-    <footer class="footer">
-        <div class="footer-content">
-            <div class="footer-divider"></div>
-            <div class="footer-brand">
-                <span class="signature-icon">
-                    <i class="fas fa-crown"></i>
-                </span>
-                <span>
-                    تم إنشاء هذه الصفحة بواسطة <span class="name">مصطفى علوان</span>
-                </span>
-            </div>
-            <div class="footer-sub">
-                <i class="fas fa-calendar-alt"></i>
-                <span id="currentYear"></span>
-                <span>•</span>
-                <i class="fas fa-shield-alt"></i>
-                <span>جميع الحقوق محفوظة</span>
-            </div>
+        <!-- ===== Toast ===== -->
+        <div class="toast-message" id="toastMessage">
+            <i class="fas fa-check-circle"></i>
+            <span id="toastText">تم التحديث بنجاح</span>
         </div>
-    </footer>
+
+        <!-- ===== Footer ===== -->
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-divider"></div>
+                <div class="footer-brand">
+                    <span class="signature-icon">
+                        <i class="fas fa-crown"></i>
+                    </span>
+                    <span>
+                        تم إنشاء هذه الصفحة بواسطة <span class="name">مصطفى علوان</span>
+                    </span>
+                </div>
+                <div class="footer-sub">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span id="currentYear"></span>
+                    <span>•</span>
+                    <i class="fas fa-shield-alt"></i>
+                    <span>جميع الحقوق محفوظة</span>
+                </div>
+            </div>
+        </footer>
+    </div>
 
     <!-- ===== Firebase ===== -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
@@ -225,181 +193,40 @@
         //  التحقق من الدخول
         // ================================================================
 
-        if (!checkAuth()) {
-            // checkAuth ستقوم بالتوجيه تلقائياً
-        }
-
-        // ================================================================
-        //  المتغيرات
-        // ================================================================
-
-        const tableBody = document.getElementById('productsTableBody');
-        const searchInput = document.getElementById('searchInput');
-        const clearBtn = document.getElementById('clearSearch');
-        const totalProducts = document.getElementById('totalProducts');
-        const addBtn = document.getElementById('addProductBtn');
-        const exportBtn = document.getElementById('exportBtn');
-        const refreshBtn = document.getElementById('refreshBtn');
-        const modal = document.getElementById('productModal');
-        const closeModalBtn = document.getElementById('closeModal');
-        const cancelModalBtn = document.getElementById('cancelModalBtn');
-        const modalTitle = document.getElementById('modalTitle');
-        const productForm = document.getElementById('productForm');
-        let allProducts = [];
-
-        // ================================================================
-        //  جلب وعرض المنتجات
-        // ================================================================
-
-        async function loadProducts() {
-            try {
-                const products = await getProducts();
-                allProducts = products;
-                totalProducts.textContent = products.length;
-                renderTable(products);
-            } catch (error) {
-                console.error('خطأ في تحميل المنتجات:', error);
-                tableBody.innerHTML = `
-                    <tr>
-                        <td colspan="7" style="text-align:center; padding:40px; color:#ef4444;">
-                            <i class="fas fa-circle-exclamation"></i>
-                            حدث خطأ في تحميل المنتجات
-                        </td>
-                    </tr>
-                `;
-            }
-        }
-
-        function renderTable(products, filter = '') {
-            const filterLower = filter.trim().toLowerCase();
-            let filtered = products;
-
-            if (filterLower !== '') {
-                filtered = products.filter(p =>
-                    (p.name && p.name.toLowerCase().includes(filterLower)) ||
-                    (p.id && p.id.toString().includes(filterLower))
-                );
-            }
-
-            if (filtered.length === 0) {
-                tableBody.innerHTML = `
-                    <tr>
-                        <td colspan="7" style="text-align:center; padding:40px; color:#94a3b8;">
-                            <i class="fas fa-box-open"></i>
-                            لا توجد منتجات مطابقة للبحث
-                        </td>
-                    </tr>
-                `;
-                return;
-            }
-
-            let html = '';
-            filtered.forEach((p, index) => {
-                const id = p.id || String(index + 1).padStart(3, '0');
-                const name = p.name || 'بدون اسم';
-                const unit = p.unit || '-';
-                const unitQty = p.unitQty || '-';
-                const wholesale = p.wholesalePrice || 0;
-                const retail = p.retailPrice || '-';
-
-                html += `
-                    <tr>
-                        <td><strong>#${id}</strong></td>
-                        <td>${name}</td>
-                        <td>${unit}</td>
-                        <td>${unitQty}</td>
-                        <td>${wholesale} جنيه</td>
-                        <td>${retail} جنيه</td>
-                        <td>
-                            <div class="actions">
-                                <button class="edit-btn" onclick="editProduct('${id}')">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                                <button class="delete-btn" onclick="deleteProduct('${id}')">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                `;
-            });
-
-            tableBody.innerHTML = html;
-        }
-
-        // ================================================================
-        //  إضافة / تعديل منتج
-        // ================================================================
-
-        function openModal(product = null) {
-            modal.classList.add('active');
-            document.body.style.overflow = 'hidden';
-
-            if (product) {
-                modalTitle.textContent = 'تعديل المنتج';
-                document.getElementById('productId').value = product.id;
-                document.getElementById('productName').value = product.name || '';
-                document.getElementById('productUnit').value = product.unit || '';
-                document.getElementById('productUnitQty').value = product.unitQty || '';
-                document.getElementById('productWholesale').value = product.wholesalePrice || '';
-                document.getElementById('productRetail').value = product.retailPrice || '';
-                document.getElementById('productPiecePrice').value = product.piecePrice || '';
-                document.getElementById('productUnitPrice').value = product.unitPrice || '';
-                document.getElementById('productDescription').value = product.description || '';
+        auth.onAuthStateChanged((user) => {
+            if (!user) {
+                window.location.href = 'login.html';
             } else {
-                modalTitle.textContent = 'إضافة منتج جديد';
-                productForm.reset();
-                document.getElementById('productId').value = '';
+                // عرض البريد الإلكتروني
+                document.getElementById('userEmail').textContent = user.email;
+                
+                // عرض اسم المستخدم إذا موجود
+                if (user.displayName) {
+                    document.getElementById('profileDisplayName').value = user.displayName;
+                }
             }
-        }
-
-        function closeModal() {
-            modal.classList.remove('active');
-            document.body.style.overflow = 'auto';
-        }
-
-        // ================================================================
-        //  أحداث المودال
-        // ================================================================
-
-        addBtn.addEventListener('click', () => openModal(null));
-        closeModalBtn.addEventListener('click', closeModal);
-        cancelModalBtn.addEventListener('click', closeModal);
-
-        modal.addEventListener('click', function(e) {
-            if (e.target === this) closeModal();
         });
 
         // ================================================================
-        //  حفظ المنتج
+        //  حفظ التغييرات
         // ================================================================
 
-        productForm.addEventListener('submit', async function(e) {
+        document.getElementById('profileForm').addEventListener('submit', async function(e) {
             e.preventDefault();
 
-            const id = document.getElementById('productId').value;
-            const productData = {
-                name: document.getElementById('productName').value.trim(),
-                unit: document.getElementById('productUnit').value,
-                unitQty: document.getElementById('productUnitQty').value || '',
-                wholesalePrice: parseFloat(document.getElementById('productWholesale').value) || 0,
-                retailPrice: document.getElementById('productRetail').value.trim(),
-                piecePrice: document.getElementById('productPiecePrice').value || '',
-                unitPrice: document.getElementById('productUnitPrice').value || '',
-                description: document.getElementById('productDescription').value.trim(),
-                status: 'متوفر',
-                minOrder: 1,
-                maxOrder: 999,
-                storeType: 'both',
-                brand: '',
-                brandId: '',
-                imageUrl: ''
-            };
+            const displayName = document.getElementById('profileDisplayName').value.trim();
+            const password = document.getElementById('profilePassword').value;
+            const passwordConfirm = document.getElementById('profilePasswordConfirm').value;
 
-            // التحقق من صحة البيانات
-            const errors = validateProduct(productData);
-            if (errors.length > 0) {
-                showToast('❌ ' + errors.join('، '), 'error');
+            // التحقق من تطابق كلمات المرور
+            if (password && password !== passwordConfirm) {
+                showToast('❌ كلمات المرور غير متطابقة', 'error');
+                return;
+            }
+
+            // التحقق من طول كلمة المرور
+            if (password && password.length < 6) {
+                showToast('❌ كلمة المرور يجب أن تكون 6 أحرف على الأقل', 'error');
                 return;
             }
 
@@ -409,25 +236,27 @@
             btn.disabled = true;
 
             try {
-                let success;
-                if (id) {
-                    // تحديث منتج موجود
-                    success = await updateProduct(id, productData);
-                } else {
-                    // إضافة منتج جديد
-                    const newId = await addProduct(productData);
-                    success = newId !== null;
+                let success = true;
+
+                // تحديث اسم المستخدم (displayName)
+                if (displayName) {
+                    const nameUpdated = await updateUserProfile(displayName);
+                    if (!nameUpdated) success = false;
+                }
+
+                // تحديث كلمة المرور
+                if (password) {
+                    const passwordUpdated = await updateUserPassword(password);
+                    if (!passwordUpdated) success = false;
                 }
 
                 if (success) {
-                    showToast('✅ تم حفظ المنتج بنجاح', 'success');
-                    closeModal();
-                    loadProducts();
+                    showToast('✅ تم حفظ التغييرات بنجاح', 'success');
                 } else {
-                    showToast('❌ حدث خطأ في حفظ المنتج', 'error');
+                    showToast('❌ حدث خطأ في حفظ التغييرات', 'error');
                 }
             } catch (error) {
-                console.error('خطأ في حفظ المنتج:', error);
+                console.error('خطأ في حفظ البيانات:', error);
                 showToast('❌ حدث خطأ، يرجى المحاولة مرة أخرى', 'error');
             }
 
@@ -436,117 +265,10 @@
         });
 
         // ================================================================
-        //  تعديل منتج
-        // ================================================================
-
-        async function editProduct(id) {
-            try {
-                const products = await getProducts();
-                const product = products.find(p => p.id === id);
-                if (product) {
-                    openModal(product);
-                } else {
-                    showToast('❌ المنتج غير موجود', 'error');
-                }
-            } catch (error) {
-                console.error('خطأ في جلب المنتج:', error);
-                showToast('❌ حدث خطأ', 'error');
-            }
-        }
-
-        // ================================================================
-        //  حذف منتج
-        // ================================================================
-
-        async function deleteProduct(id) {
-            if (!confirm('هل أنت متأكد من حذف هذا المنتج؟')) return;
-
-            try {
-                const success = await deleteProduct(id);
-                if (success) {
-                    showToast('✅ تم حذف المنتج بنجاح', 'success');
-                    loadProducts();
-                } else {
-                    showToast('❌ حدث خطأ في حذف المنتج', 'error');
-                }
-            } catch (error) {
-                console.error('خطأ في حذف المنتج:', error);
-                showToast('❌ حدث خطأ', 'error');
-            }
-        }
-
-        // ================================================================
-        //  تصدير HTML
-        // ================================================================
-
-        exportBtn.addEventListener('click', async function() {
-            try {
-                const products = await getProducts();
-                if (!products || products.length === 0) {
-                    showToast('❌ لا توجد منتجات للتصدير', 'error');
-                    return;
-                }
-
-                // هنا هتاخد الكود الكامل وتضيف المنتجات الجديدة
-                // سنقوم بإنشاء ملف HTML كامل مع البيانات المحدثة
-
-                // جلب ملف index.html الحالي
-                const response = await fetch('index.html');
-                let htmlContent = await response.text();
-
-                // استبدال مصفوفة المنتجات
-                const productsJS = exportProductsHTML(products);
-                const regex = /const products = \[[\s\S]*?\];/;
-                htmlContent = htmlContent.replace(regex, productsJS);
-
-                // تحميل الملف
-                downloadHTML(htmlContent, 'index.html');
-                showToast('✅ تم تصدير الملف بنجاح', 'success');
-
-            } catch (error) {
-                console.error('خطأ في التصدير:', error);
-                showToast('❌ حدث خطأ في تصدير الملف', 'error');
-            }
-        });
-
-        // ================================================================
-        //  تحديث البيانات
-        // ================================================================
-
-        refreshBtn.addEventListener('click', function() {
-            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري التحديث...';
-            this.disabled = true;
-
-            loadProducts().finally(() => {
-                this.innerHTML = '<i class="fas fa-rotate-right"></i> تحديث';
-                this.disabled = false;
-                showToast('✅ تم تحديث البيانات', 'success');
-            });
-        });
-
-        // ================================================================
-        //  البحث في لوحة التحكم
-        // ================================================================
-
-        searchInput.addEventListener('input', function() {
-            const val = this.value;
-            renderTable(allProducts, val);
-            clearBtn.classList.toggle('visible', val.length > 0);
-        });
-
-        clearBtn.addEventListener('click', function() {
-            searchInput.value = '';
-            renderTable(allProducts, '');
-            this.classList.remove('visible');
-            searchInput.focus();
-        });
-
-        // ================================================================
         //  تحميل الصفحة
         // ================================================================
 
         document.getElementById('currentYear').textContent = new Date().getFullYear();
-        loadProducts();
 
         // ================================================================
         //  Service Worker
