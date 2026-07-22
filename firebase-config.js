@@ -40,7 +40,29 @@ async function getAdmin() {
   try {
     const snapshot = await db.ref('admin').once('value');
     const data = snapshot.val();
-    return data || null;
+    
+    // التحقق من هيكل البيانات
+    if (data) {
+      // إذا كان هناك مفتاح 'admin' داخله
+      if (data.admin) {
+        return data.admin;
+      }
+      // إذا كان الكائن يحتوي على username مباشرة
+      if (data.username) {
+        return data;
+      }
+      // إذا كان هناك مفتاح واحد فقط (مثل 'Abdo' أو 'admin')
+      const keys = Object.keys(data);
+      if (keys.length === 1) {
+        const firstKey = keys[0];
+        if (data[firstKey] && data[firstKey].username) {
+          return data[firstKey];
+        }
+        return data[firstKey] || null;
+      }
+      return data;
+    }
+    return null;
   } catch (error) {
     console.error('خطأ في جلب بيانات المدير:', error);
     return null;
@@ -83,9 +105,22 @@ async function deleteProduct(productId) {
 // إضافة منتج جديد
 async function addProduct(productData) {
   try {
-    const newRef = db.ref('products').push();
-    await newRef.set(productData);
-    return newRef.key;
+    // إنشاء ID جديد
+    const products = await getProducts();
+    const maxId = products.reduce((max, p) => {
+      const numId = parseInt(p.id);
+      return numId > max ? numId : max;
+    }, 0);
+    const newId = String(maxId + 1).padStart(3, '0');
+    
+    productData.id = newId;
+    
+    // إضافة المنتج إلى القائمة
+    products.push(productData);
+    
+    // حفظ القائمة كاملة
+    const success = await saveProducts(products);
+    return success ? newId : null;
   } catch (error) {
     console.error('خطأ في إضافة المنتج:', error);
     return null;
@@ -96,9 +131,12 @@ async function addProduct(productData) {
 async function loginAdmin(username, password) {
   try {
     const admin = await getAdmin();
+    
+    console.log('بيانات المدير:', admin); // للتأكد
+    
     if (admin && admin.username === username && admin.password === password) {
       // تحديث آخر تسجيل دخول
-      await db.ref('admin/lastLogin').set(new Date().toISOString());
+      await db.ref('admin/lastLogin').set(Date.now());
       // حفظ جلسة
       sessionStorage.setItem('isLoggedIn', 'true');
       sessionStorage.setItem('username', username);
@@ -131,8 +169,13 @@ function checkAuth() {
 // تحديث بيانات المدير
 async function updateAdmin(newData) {
   try {
-    await db.ref('admin').update(newData);
-    return true;
+    const admin = await getAdmin();
+    if (admin) {
+      // تحديث البيانات مع الاحتفاظ بالهيكل
+      await db.ref('admin').update(newData);
+      return true;
+    }
+    return false;
   } catch (error) {
     console.error('خطأ في تحديث بيانات المدير:', error);
     return false;
