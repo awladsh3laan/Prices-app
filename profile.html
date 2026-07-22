@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>الملف الشخصي - منتجات شعلان</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#ef4444">
+</head>
+<body>
+
+    <div class="container">
+
+        <!-- ===== Header ===== -->
+        <header class="app-header">
+            <div class="logo-section">
+                <div class="app-logo">
+                    <i class="fas fa-star"></i>
+                </div>
+                <div class="title-wrapper">
+                    <h1>
+                        قائمة <span>أسعار</span>
+                        <span class="offline-badge">
+                            <i class="fas fa-wifi"></i> Offline
+                        </span>
+                    </h1>
+                    <div class="subtitle">
+                        <i class="fas fa-circle-check"></i>
+                        منتجات <span style="font-weight:600; color:#0f172a;">شعلان</span>
+                        <i class="fas fa-circle-check"></i>
+                    </div>
+                </div>
+            </div>
+
+            <button class="hamburger" onclick="toggleHamburger()" aria-label="القائمة">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <nav class="nav-menu" id="navMenu">
+                <a href="index.html"><i class="fas fa-home"></i> الرئيسية</a>
+                <a href="dashboard.html"><i class="fas fa-cog"></i> لوحة التحكم</a>
+                <a href="profile.html" class="active"><i class="fas fa-user"></i> الملف الشخصي</a>
+                <a href="#" onclick="logout()" class="logout-btn"><i class="fas fa-sign-out-alt"></i> تسجيل الخروج</a>
+            </nav>
+        </header>
+
+        <div class="sub-head">
+            <i class="fas fa-user-circle"></i>
+            الملف الشخصي — <span class="highlight">تعديل البيانات</span>
+            <i class="fas fa-edit"></i>
+        </div>
+
+        <!-- ===== Profile Form ===== -->
+        <div class="profile-container">
+            <div class="avatar">
+                <i class="fas fa-user"></i>
+            </div>
+            <h2>البيانات الشخصية</h2>
+            <p class="sub-text">يمكنك تعديل اسم المستخدم وكلمة المرور</p>
+
+            <form id="profileForm">
+                <div class="form-group">
+                    <label><i class="fas fa-envelope"></i> البريد الإلكتروني</label>
+                    <div class="input-icon">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="profileEmail" placeholder="البريد الإلكتروني" readonly disabled>
+                    </div>
+                    <small style="color:#94a3b8; font-size:0.8rem;">لا يمكن تغيير البريد الإلكتروني</small>
+                </div>
+
+                <div class="form-group">
+                    <label><i class="fas fa-user"></i> اسم المستخدم</label>
+                    <div class="input-icon">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="profileUsername" placeholder="اسم المستخدم" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label><i class="fas fa-lock"></i> كلمة المرور الجديدة</label>
+                    <div class="input-icon">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="profilePassword" placeholder="كلمة المرور الجديدة (اتركها فارغة إذا لا تريد التغيير)">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label><i class="fas fa-lock"></i> تأكيد كلمة المرور</label>
+                    <div class="input-icon">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="profilePasswordConfirm" placeholder="أعد كتابة كلمة المرور الجديدة">
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-primary" style="width:100%; justify-content:center;">
+                    <i class="fas fa-save"></i> حفظ التغييرات
+                </button>
+            </form>
+        </div>
+
+        <!-- ===== Toast ===== -->
+        <div class="toast-message" id="toastMessage">
+            <i class="fas fa-check-circle"></i>
+            <span id="toastText">تم التحديث بنجاح</span>
+        </div>
+
+        <!-- ===== Footer ===== -->
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-divider"></div>
+                <div class="footer-brand">
+                    <span class="signature-icon">
+                        <i class="fas fa-crown"></i>
+                    </span>
+                    <span>
+                        تم إنشاء هذه الصفحة بواسطة <span class="name">مصطفى علوان</span>
+                    </span>
+                </div>
+                <div class="footer-sub">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span id="currentYear"></span>
+                    <span>•</span>
+                    <i class="fas fa-shield-alt"></i>
+                    <span>جميع الحقوق محفوظة</span>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- ===== Firebase ===== -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="firebase-config.js"></script>
+    <script src="script.js"></script>
+
+    <script>
+        // ================================================================
+        //  التحقق من الدخول
+        // ================================================================
+
+        if (!checkAuth()) {
+            // checkAuth ستقوم بالتوجيه تلقائياً
+        }
+
+        // ================================================================
+        //  تحميل بيانات المدير
+        // ================================================================
+
+        async function loadAdminData() {
+            try {
+                const admin = await getAdmin();
+                if (admin) {
+                    document.getElementById('profileEmail').value = admin.email || '';
+                    document.getElementById('profileUsername').value = admin.username || '';
+                }
+            } catch (error) {
+                console.error('خطأ في تحميل بيانات المدير:', error);
+                showToast('❌ حدث خطأ في تحميل البيانات', 'error');
+            }
+        }
+
+        // ================================================================
+        //  حفظ التغييرات
+        // ================================================================
+
+        document.getElementById('profileForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const username = document.getElementById('profileUsername').value.trim();
+            const password = document.getElementById('profilePassword').value;
+            const passwordConfirm = document.getElementById('profilePasswordConfirm').value;
+
+            if (!username) {
+                showToast('❌ اسم المستخدم مطلوب', 'error');
+                return;
+            }
+
+            // التحقق من تطابق كلمات المرور
+            if (password && password !== passwordConfirm) {
+                showToast('❌ كلمات المرور غير متطابقة', 'error');
+                return;
+            }
+
+            // التحقق من طول كلمة المرور
+            if (password && password.length < 6) {
+                showToast('❌ كلمة المرور يجب أن تكون 6 أحرف على الأقل', 'error');
+                return;
+            }
+
+            const btn = this.querySelector('button[type="submit"]');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الحفظ...';
+            btn.disabled = true;
+
+            try {
+                const updateData = { username: username };
+                if (password) {
+                    updateData.password = password;
+                }
+
+                const success = await updateAdmin(updateData);
+
+                if (success) {
+                    // تحديث الجلسة
+                    sessionStorage.setItem('username', username);
+                    showToast('✅ تم حفظ التغييرات بنجاح', 'success');
+                } else {
+                    showToast('❌ حدث خطأ في حفظ التغييرات', 'error');
+                }
+            } catch (error) {
+                console.error('خطأ في حفظ البيانات:', error);
+                showToast('❌ حدث خطأ، يرجى المحاولة مرة أخرى', 'error');
+            }
+
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+        });
+
+        // ================================================================
+        //  تحميل الصفحة
+        // ================================================================
+
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+        loadAdminData();
+
+        // ================================================================
+        //  Service Worker
+        // ================================================================
+
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js')
+                .then(() => console.log('✅ Service Worker مسجل'))
+                .catch(err => console.log('❌ خطأ في SW:', err));
+        }
+    </script>
+
+</body>
+</html>
