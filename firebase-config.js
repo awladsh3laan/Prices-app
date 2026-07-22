@@ -35,18 +35,6 @@ async function getProducts() {
   }
 }
 
-// جلب بيانات المدير
-async function getAdmin() {
-  try {
-    const snapshot = await db.ref('admin').once('value');
-    const data = snapshot.val();
-    return data || null;
-  } catch (error) {
-    console.error('خطأ في جلب بيانات المدير:', error);
-    return null;
-  }
-}
-
 // حفظ المنتجات
 async function saveProducts(products) {
   try {
@@ -83,28 +71,47 @@ async function deleteProduct(productId) {
 // إضافة منتج جديد
 async function addProduct(productData) {
   try {
-    const newRef = db.ref('products').push();
-    await newRef.set(productData);
-    return newRef.key;
+    // إنشاء ID جديد
+    const products = await getProducts();
+    const maxId = products.reduce((max, p) => {
+      const numId = parseInt(p.id);
+      return numId > max ? numId : max;
+    }, 0);
+    const newId = String(maxId + 1).padStart(3, '0');
+    
+    productData.id = newId;
+    
+    // إضافة المنتج إلى القائمة
+    products.push(productData);
+    
+    // حفظ القائمة كاملة
+    const success = await saveProducts(products);
+    return success ? newId : null;
   } catch (error) {
     console.error('خطأ في إضافة المنتج:', error);
     return null;
   }
 }
 
-// تسجيل الدخول
-async function loginAdmin(username, password) {
+// ================================================================
+//  دوال المصادقة (Firebase Auth)
+// ================================================================
+
+// تسجيل الدخول باستخدام البريد الإلكتروني وكلمة المرور
+async function loginAdmin(email, password) {
   try {
-    const admin = await getAdmin();
-    if (admin && admin.username === username && admin.password === password) {
-      // تحديث آخر تسجيل دخول
-      await db.ref('admin/lastLogin').set(new Date().toISOString());
-      // حفظ جلسة
-      sessionStorage.setItem('isLoggedIn', 'true');
-      sessionStorage.setItem('username', username);
-      return true;
-    }
-    return false;
+    const result = await auth.signInWithEmailAndPassword(email, password);
+    const user = result.user;
+    
+    // تخزين بيانات الجلسة
+    sessionStorage.setItem('isLoggedIn', 'true');
+    sessionStorage.setItem('userEmail', user.email);
+    sessionStorage.setItem('userId', user.uid);
+    
+    // تحديث آخر تسجيل دخول في قاعدة البيانات
+    await db.ref(`admin/users/${user.uid}/lastLogin`).set(Date.now());
+    
+    return true;
   } catch (error) {
     console.error('خطأ في تسجيل الدخول:', error);
     return false;
@@ -112,10 +119,16 @@ async function loginAdmin(username, password) {
 }
 
 // تسجيل الخروج
-function logout() {
-  sessionStorage.removeItem('isLoggedIn');
-  sessionStorage.removeItem('username');
-  window.location.href = 'login.html';
+async function logout() {
+  try {
+    await auth.signOut();
+    sessionStorage.removeItem('isLoggedIn');
+    sessionStorage.removeItem('userEmail');
+    sessionStorage.removeItem('userId');
+    window.location.href = 'login.html';
+  } catch (error) {
+    console.error('خطأ في تسجيل الخروج:', error);
+  }
 }
 
 // التحقق من حالة الدخول
@@ -128,13 +141,58 @@ function checkAuth() {
   return true;
 }
 
-// تحديث بيانات المدير
-async function updateAdmin(newData) {
+// جلب بيانات المستخدم من Firebase Auth
+function getCurrentUser() {
+  return auth.currentUser;
+}
+
+// تحديث بيانات المستخدم (الاسم)
+async function updateUserProfile(displayName) {
   try {
-    await db.ref('admin').update(newData);
-    return true;
-  } catch (error) {
-    console.error('خطأ في تحديث بيانات المدير:', error);
+    const user = auth.currentUser;
+    if (user) {
+      await user.updateProfile({
+        displayName: displayName
+      });
+      
+      // تحديث في قاعدة البيانات أيضاً
+      await db.ref(`admin/users/${user.uid}/displayName`).set(displayName);
+      return true;
+    }
     return false;
+  } catch (error) {
+    console.error('خطأ في تحديث الملف الشخصي:', error);
+    return false;
+  }
+}
+
+// تحديث كلمة المرور
+async function updateUserPassword(newPassword) {
+  try {
+    const user = auth.currentUser;
+    if (user) {
+      await user.updatePassword(newPassword);
+      return true;
+    }
+    return false;
+  } catch (error) {
+    console.error('خطأ في تحديث كلمة المرور:', error);
+    return false;
+  }
+}
+
+// جلب بيانات المستخدم من قاعدة البيانات (للمعلومات الإضافية)
+async function getUserData() {
+  try {
+    const user = auth.currentUser;
+    if (user) {
+      const snapshot = await db.ref(`admin/users/${user.uid}`).once('value');
+      const data = snapshot.val();
+      return data || null;
+    }
+    return null;
+  } catch (error) {
+    console.error('خطأ في جلب بيانات المستخدم:', error);
+    return null;
   }
 }
