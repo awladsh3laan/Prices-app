@@ -8,6 +8,156 @@
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#ef4444">
+    <style>
+        /* تحسينات إضافية لصفحة الدخول */
+        .login-container {
+            max-width: 420px;
+            margin: 40px auto;
+            background: white;
+            padding: 40px 32px;
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-lg);
+            border: 1px solid #eef2f6;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        .login-container .logo {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .login-container .logo i {
+            font-size: 3.5rem;
+            background: var(--gradient-main);
+            background-size: 200% 200%;
+            animation: gradientMove 4s ease infinite;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .login-container h2 {
+            text-align: center;
+            margin-bottom: 6px;
+            color: #0f172a;
+            font-size: 1.6rem;
+        }
+
+        .login-container .sub-text {
+            text-align: center;
+            color: #94a3b8;
+            font-size: 0.9rem;
+            margin-bottom: 28px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #475569;
+            margin-bottom: 6px;
+            font-size: 0.9rem;
+        }
+
+        .form-group label i {
+            color: var(--primary-red);
+            margin-left: 8px;
+        }
+
+        .input-icon {
+            position: relative;
+        }
+
+        .input-icon i {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            font-size: 1rem;
+        }
+
+        .input-icon input {
+            width: 100%;
+            padding: 14px 44px 14px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: var(--transition);
+            outline: none;
+            background: white;
+        }
+
+        .input-icon input:focus {
+            border-color: var(--primary-red);
+            box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.1);
+        }
+
+        .btn-primary {
+            background: var(--gradient-main);
+            background-size: 200% 200%;
+            animation: gradientMove 4s ease infinite;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 60px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-family: inherit;
+            box-shadow: 0 4px 20px rgba(239, 68, 68, 0.25);
+            width: 100%;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(239, 68, 68, 0.35);
+        }
+
+        .btn-primary:active {
+            transform: scale(0.97);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .login-footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #94a3b8;
+            font-size: 0.85rem;
+        }
+
+        .login-footer i {
+            color: var(--primary-red);
+        }
+
+        .error-message {
+            background: #fee2e2;
+            color: #dc2626;
+            padding: 12px 16px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            display: none;
+            font-size: 0.9rem;
+            border: 1px solid #fecaca;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+    </style>
 </head>
 <body>
 
@@ -45,20 +195,31 @@
             </nav>
         </header>
 
+        <div class="sub-head">
+            <i class="fas fa-lock"></i>
+            تسجيل الدخول — <span class="highlight">لوحة التحكم</span>
+            <i class="fas fa-user-shield"></i>
+        </div>
+
         <!-- ===== Login Form ===== -->
         <div class="login-container">
             <div class="logo">
-                <i class="fas fa-lock"></i>
+                <i class="fas fa-user-circle"></i>
             </div>
-            <h2>تسجيل الدخول</h2>
-            <p class="sub-text">أدخل بياناتك للوصول إلى لوحة التحكم</p>
+            <h2>مرحباً بعودتك</h2>
+            <p class="sub-text">سجل دخولك للوصول إلى لوحة التحكم</p>
+
+            <div class="error-message" id="errorMessage">
+                <i class="fas fa-exclamation-circle"></i>
+                <span id="errorText">خطأ في البريد الإلكتروني أو كلمة المرور</span>
+            </div>
 
             <form id="loginForm">
                 <div class="form-group">
-                    <label><i class="fas fa-user"></i> اسم المستخدم</label>
+                    <label><i class="fas fa-envelope"></i> البريد الإلكتروني</label>
                     <div class="input-icon">
-                        <i class="fas fa-user"></i>
-                        <input type="text" id="username" placeholder="أدخل اسم المستخدم" required autofocus>
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="email" placeholder="example@email.com" required autofocus>
                     </div>
                 </div>
 
@@ -70,16 +231,16 @@
                     </div>
                 </div>
 
-                <button type="submit" class="btn-primary" style="width:100%; justify-content:center;">
+                <button type="submit" class="btn-primary" id="loginBtn">
                     <i class="fas fa-sign-in-alt"></i>
                     تسجيل الدخول
                 </button>
             </form>
 
-            <p style="text-align:center; margin-top:16px; color:#94a3b8; font-size:0.85rem;">
+            <div class="login-footer">
                 <i class="fas fa-info-circle"></i>
-                للتواصل مع المدير للحصول على البيانات
-            </p>
+                للتواصل مع المدير للحصول على بيانات الدخول
+            </div>
         </div>
 
         <!-- ===== Toast ===== -->
@@ -120,54 +281,106 @@
 
     <script>
         // ================================================================
-        //  تسجيل الدخول
+        //  تسجيل الدخول باستخدام Firebase Auth
         // ================================================================
 
-        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+        const loginForm = document.getElementById('loginForm');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const loginBtn = document.getElementById('loginBtn');
+        const errorMessage = document.getElementById('errorMessage');
+        const errorText = document.getElementById('errorText');
+
+        // التحقق من حالة الدخول - إذا كان مسجل دخول بالفعل يوجه للوحة التحكم
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                // مستخدم مسجل دخول
+                sessionStorage.setItem('isLoggedIn', 'true');
+                sessionStorage.setItem('userEmail', user.email);
+                sessionStorage.setItem('userId', user.uid);
+                window.location.href = 'dashboard.html';
+            }
+        });
+
+        loginForm.addEventListener('submit', async function(e) {
             e.preventDefault();
 
-            const username = document.getElementById('username').value.trim();
-            const password = document.getElementById('password').value.trim();
+            const email = emailInput.value.trim();
+            const password = passwordInput.value.trim();
 
-            if (!username || !password) {
-                showToast('يرجى إدخال اسم المستخدم وكلمة المرور', 'error');
+            // إخفاء رسالة الخطأ السابقة
+            errorMessage.classList.remove('show');
+
+            if (!email || !password) {
+                showError('يرجى إدخال البريد الإلكتروني وكلمة المرور');
                 return;
             }
 
-            const btn = this.querySelector('button[type="submit"]');
-            const originalText = btn.innerHTML;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري التحقق...';
-            btn.disabled = true;
+            // تعطيل الزر أثناء عملية الدخول
+            loginBtn.disabled = true;
+            loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري التحقق...';
 
             try {
-                const success = await loginAdmin(username, password);
+                const success = await loginAdmin(email, password);
 
                 if (success) {
                     showToast('✅ تم تسجيل الدخول بنجاح', 'success');
                     setTimeout(() => {
                         window.location.href = 'dashboard.html';
-                    }, 800);
+                    }, 600);
                 } else {
-                    showToast('❌ اسم المستخدم أو كلمة المرور غير صحيحة', 'error');
-                    btn.innerHTML = originalText;
-                    btn.disabled = false;
+                    showError('البريد الإلكتروني أو كلمة المرور غير صحيحة');
+                    loginBtn.disabled = false;
+                    loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> تسجيل الدخول';
                 }
             } catch (error) {
                 console.error('خطأ في تسجيل الدخول:', error);
-                showToast('❌ حدث خطأ، يرجى المحاولة مرة أخرى', 'error');
-                btn.innerHTML = originalText;
-                btn.disabled = false;
+                
+                // معالجة أخطاء Firebase Auth
+                let errorMsg = 'حدث خطأ في تسجيل الدخول';
+                if (error.code === 'auth/user-not-found') {
+                    errorMsg = 'لا يوجد مستخدم بهذا البريد الإلكتروني';
+                } else if (error.code === 'auth/wrong-password') {
+                    errorMsg = 'كلمة المرور غير صحيحة';
+                } else if (error.code === 'auth/invalid-email') {
+                    errorMsg = 'البريد الإلكتروني غير صحيح';
+                } else if (error.code === 'auth/too-many-requests') {
+                    errorMsg = 'تم إيقاف الحساب مؤقتاً بسبب كثرة المحاولات، يرجى المحاولة لاحقاً';
+                }
+                
+                showError(errorMsg);
+                loginBtn.disabled = false;
+                loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> تسجيل الدخول';
             }
         });
 
-        // ================================================================
-        //  التحقق من حالة الدخول
-        // ================================================================
+        // دالة عرض رسالة خطأ
+        function showError(message) {
+            errorText.textContent = message;
+            errorMessage.classList.add('show');
+        }
 
-        const isLoggedIn = sessionStorage.getItem('isLoggedIn');
-        if (isLoggedIn === 'true') {
-            // إذا كان مسجل دخول بالفعل، يوجه للوحة التحكم
-            window.location.href = 'dashboard.html';
+        // دالة عرض رسالة نجاح (Toast)
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toastMessage');
+            const toastText = document.getElementById('toastText');
+            const icon = toast.querySelector('i');
+            
+            toastText.textContent = message;
+            
+            if (type === 'success') {
+                icon.className = 'fas fa-check-circle';
+                icon.style.color = '#22c55e';
+            } else if (type === 'error') {
+                icon.className = 'fas fa-exclamation-circle';
+                icon.style.color = '#ef4444';
+            }
+            
+            toast.classList.add('show');
+            clearTimeout(toast._timer);
+            toast._timer = setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
         }
 
         // ================================================================
@@ -175,6 +388,16 @@
         // ================================================================
 
         document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        // ================================================================
+        //  Service Worker
+        // ================================================================
+
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js')
+                .then(() => console.log('✅ Service Worker مسجل'))
+                .catch(err => console.log('❌ خطأ في SW:', err));
+        }
     </script>
 
 </body>
