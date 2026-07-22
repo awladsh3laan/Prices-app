@@ -181,3 +181,47 @@ async function updateAdmin(newData) {
     return false;
   }
 }
+async function loginAdmin(username, password) {
+  try {
+    // جلب بيانات المدير
+    const snapshot = await db.ref('admin').once('value');
+    const data = snapshot.val();
+    
+    // محاولة استخراج بيانات المدير من أي هيكل
+    let adminData = null;
+    
+    if (data) {
+      // إذا كان هناك مفتاح 'admin'
+      if (data.admin && data.admin.username) {
+        adminData = data.admin;
+      } 
+      // إذا كان الكائن نفسه هو بيانات المدير
+      else if (data.username) {
+        adminData = data;
+      }
+      // إذا كان هناك مفتاح واحد فقط (مثل 'Abdo')
+      else {
+        const keys = Object.keys(data);
+        for (const key of keys) {
+          if (data[key] && data[key].username) {
+            adminData = data[key];
+            break;
+          }
+        }
+      }
+    }
+    
+    console.log('بيانات المدير المستخرجة:', adminData);
+    
+    if (adminData && adminData.username === username && adminData.password === password) {
+      await db.ref('admin/lastLogin').set(Date.now());
+      sessionStorage.setItem('isLoggedIn', 'true');
+      sessionStorage.setItem('username', username);
+      return true;
+    }
+    return false;
+  } catch (error) {
+    console.error('خطأ في تسجيل الدخول:', error);
+    return false;
+  }
+}
