@@ -1139,4 +1139,75 @@ table .actions .delete-btn:hover {
   }
 
   .product-price {
-    font
+    font-size: 1.1rem;
+    padding: 2px 14px;
+  }
+
+  .product-details {
+    font-size: 0.7rem;
+  }
+
+  .dashboard-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .modal .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .login-container,
+  .profile-container {
+    padding: 28px 20px;
+    margin: 30px auto;
+  }
+
+  table {
+    font-size: 0.75rem;
+  }
+
+  table th,
+  table td {
+    padding: 10px 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .products-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .app-logo {
+    width: 38px;
+    height: 38px;
+    font-size: 1.1rem;
+  }
+
+  .title-wrapper h1 {
+    font-size: 1rem;
+  }
+
+  .search-box {
+    padding: 12px 44px 12px 16px;
+    font-size: 0.9rem;
+  }
+
+  .product-price {
+    font-size: 1rem;
+    padding: 2px 12px;
+  }
+
+  .footer-brand {
+    font-size: 0.85rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .btn-primary,
+  .btn-secondary,
+  .btn-danger {
+    padding: 10px 20px;
+    font-size: 0.8rem;
+  }
+}
